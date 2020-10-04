@@ -1,0 +1,153 @@
+\documentclass[compress,mathserif,cjk]{beamer}
+\usepackage{mathrsfs}
+\usepackage{color}
+\usepackage{CJK}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{extarrows}
+\usepackage{ulem}
+\usepackage{latexsym}
+
+% Copyright 2003 by Till Tantau <tantau@cs.tu-berlin.de>.
+%
+% This program can be redistributed and/or modified under the terms
+% of the LaTeX Project Public License Distributed from CTAN
+% archives in directory macros/latex/base/lppl.txt.
+
+%
+% The purpose of this example is to show how \part can be used to
+% organize a lecture.
+%
+\usetheme{Warsaw}
+  % 可供选择的主题参见 beameruserguide.pdf, 第 134 页起
+  % 无导航条的主题: Bergen, Boadilla, Madrid, Pittsburgh, Rochester;
+  % 有树形导航条的主题: Antibes, JuanLesPins, Montpellier;
+  % 有目录竖条的主题: Berkeley, PaloAlto, Goettingen, Marburg, Hannover;
+  % 有圆点导航条的主题: Berlin, Dresden, Darmstadt, Frankfurt, Singapore, Szeged;
+  % 有节与小节导航条的主题: Copenhagen, Luebeck, Malmos, Warsaw
+
+%  \setbeamercovered{transparent}
+% 如果取消上一行的注解 %, 就会使得被覆盖部分变得透明(依稀可见)
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{CJK}
+
+%\usepackage{beamerthemesplit}
+%\usepackage{beamerthemeshadow,color}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{colortbl}
+
+\graphicspath{{images/}}         %% 图片路径. 本文的图片都放在这个文件夹里了.
+\DeclareGraphicsRule{*}{mps}{*}{} %% 使 pdflatex 可以纳入 metapost 做的图片.
+\renewcommand{\div}{\operatorname{div}}
+\renewcommand{\raggedright}{\leftskip=0pt \rightskip=0pt plus 0cm}
+\raggedright %% 中文对齐
+
+%==============自定义: 逐个 item 高亮(\hilite), 或"高黑"(\hidark)==================%
+\def\hilite<#1>{%
+\temporal<#1>{\color{blue!35}}{\color{magenta}}%
+{\color{blue!75}}}
+\def\hidark<#1>{%
+\temporal<#1>{\color{black!35}}{\color{magenta}}%
+{\color{black}}}
+
+\newcolumntype{H}{>{\columncolor{blue!20}}c!{\vrule}}
+\newcolumntype{H}{>{\columncolor{blue!20}}c}  %% 表格设置
+%==================================参考文献==============================================================
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}  %自定义命令\upcite, 使参考文献引用以上标出现
+\bibliographystyle{plain}
+%=========================================================================================
+
+\def\colorb{\textcolor[rgb]{0.00,0.00,1.00}}
+\def\colorg{\textcolor[rgb]{0.00,1.00,0.00}}
+\def\colorr{\textcolor[rgb]{1.00,0.00,0.00}}
+\newcommand\hdim{\dim_{\mathrm H}}
+\newtheorem{lem}{Lemma}[section]
+\newtheorem{nt}[lem]{Notation}
+\newtheorem{dfn}[lem]{Definition}
+\newtheorem{pro}[lem]{Proposition}
+\newtheorem{thm}[lem]{Theorem}
+\newtheorem{exa}[lem]{Example}
+\newtheorem{cor}[lem]{Corollary}
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\numberwithin{equation}{section}
+\def\N{\mathbb N}
+\def\Q{\mathbb Q}
+\def\R{\mathbb R}
+\def\Z{\mathbb Z}
+\def\vep{\varepsilon}
+%=========================================================================================
+%\setbeamercovered{transparent}
+%
+% The following info should normally be given in you main file:
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                           定制幻灯片---重定义字体、字号命令                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\song}{\CJKfamily{song}}    % 宋体   (Windows自带simsun.ttf)
+\newcommand{\fs}{\CJKfamily{fs}}        % 仿宋体 (Windows自带simfs.ttf)
+\newcommand{\kai}{\CJKfamily{kai}}      % 楷体   (Windows自带simkai.ttf)
+\newcommand{\hei}{\bf}      % 黑体   (Windows自带simhei.ttf)
+\newcommand{\li}{\CJKfamily{li}}        % 隶书   (Windows自带simli.ttf)
+\newcommand{\you}{\CJKfamily{you}}      % 幼圆   (Windows自带simyou.ttf)
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}     % 字号设置
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont} % 字号设置
+\newcommand{\yichu}{\fontsize{32pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\erhao}{\fontsize{21pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}    % 字号设置
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}   % 字号设置
+\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}    % 字号设置
+
+%======================= 标题名称中文化 ============================%
+\newtheorem{dingyi}{\hei 定义~}[section]
+\newtheorem{dingli}{\hei 定理~}[section]
+\newtheorem{yinli}[dingli]{\hei 引理~}
+\newtheorem{tuilun}[dingli]{\hei 推论~}
+\newtheorem{mingti}[dingli]{\hei 命题~}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \usepackage{beamerthemesplit} // Activate for custom appearance
+
+
+\title{\textsc{第2章\ \ \ 行列式与克拉默法则}}
+\author{郑州大学数学与统计学院 线性代数教研室}
+\date{}
+
+\begin{document}
+\begin{CJK}{UTF8}{gbsn}
+\frame{\titlepage}
+
+\begin{frame}\frametitle{目录}
+ \tableofcontents
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+%=====================================================frame8=========================================
+
+
+\begin{frame}
+\begin{center}
+{\textcolor[rgb]{0.50,0.00,1.00}{\textbf{\xiaoerhao{Thanks for your attention!}}}}\bigskip
+\end{center}
+\end{frame}
+\end{CJK}
+\end{document}
+
+

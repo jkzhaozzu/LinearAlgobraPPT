@@ -1,0 +1,5 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{5.1 特征值与特征向量}{3}{0}{1}
+\beamer@sectionintoc {2}{5.2 矩阵的相似}{25}{0}{2}
+\beamer@sectionintoc {3}{5.3 实对称矩阵的相似标准形}{50}{0}{3}
+\beamer@sectionintoc {4}{5.4 若尔当标准形简介}{84}{0}{4}

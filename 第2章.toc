@@ -1,0 +1,2 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{2.3 克拉默法则}{3}{0}{1}

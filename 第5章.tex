@@ -1,0 +1,618 @@
+\documentclass[compress,mathserif,cjk]{beamer}
+\usepackage{mathrsfs}
+\usepackage{color}
+\usepackage{CJK}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{extarrows}
+\usepackage{ulem}
+\usepackage{latexsym}
+\usepackage{pmat}
+
+% Copyright 2003 by Till Tantau <tantau@cs.tu-berlin.de>.
+%
+% This program can be redistributed and/or modified under the terms
+% of the LaTeX Project Public License Distributed from CTAN
+% archives in directory macros/latex/base/lppl.txt.
+
+%
+% The purpose of this example is to show how \part can be used to
+% organize a lecture.
+%
+\usetheme{Warsaw}
+  % 可供选择的主题参见 beameruserguide.pdf, 第 134 页起
+  % 无导航条的主题: Bergen, Boadilla, Madrid, Pittsburgh, Rochester;
+  % 有树形导航条的主题: Antibes, JuanLesPins, Montpellier;
+  % 有目录竖条的主题: Berkeley, PaloAlto, Goettingen, Marburg, Hannover;
+  % 有圆点导航条的主题: Berlin, Dresden, Darmstadt, Frankfurt, Singapore, Szeged;
+  % 有节与小节导航条的主题: Copenhagen, Luebeck, Malmos, Warsaw
+
+%  \setbeamercovered{transparent}
+% 如果取消上一行的注解 %, 就会使得被覆盖部分变得透明(依稀可见)
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{CJK}
+
+%\usepackage{beamerthemesplit}
+%\usepackage{beamerthemeshadow,color}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{colortbl}
+
+\graphicspath{{images/}}         %% 图片路径. 本文的图片都放在这个文件夹里了.
+\DeclareGraphicsRule{*}{mps}{*}{} %% 使 pdflatex 可以纳入 metapost 做的图片.
+\renewcommand{\div}{\operatorname{div}}
+\renewcommand{\raggedright}{\leftskip=0pt \rightskip=0pt plus 0cm}
+\raggedright %% 中文对齐
+
+%==============自定义: 逐个 item 高亮(\hilite), 或"高黑"(\hidark)==================%
+\def\hilite<#1>{%
+\temporal<#1>{\color{blue!35}}{\color{magenta}}%
+{\color{blue!75}}}
+\def\hidark<#1>{%
+\temporal<#1>{\color{black!35}}{\color{magenta}}%
+{\color{black}}}
+
+\newcolumntype{H}{>{\columncolor{blue!20}}c!{\vrule}}
+\newcolumntype{H}{>{\columncolor{blue!20}}c}  %% 表格设置
+%==================================参考文献==============================================================
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}  %自定义命令\upcite, 使参考文献引用以上标出现
+\bibliographystyle{plain}
+%=========================================================================================
+
+\def\colorb{\textcolor[rgb]{0.00,0.00,1.00}}
+\def\colorg{\textcolor[rgb]{0.00,1.00,0.00}}
+\def\colorr{\textcolor[rgb]{1.00,0.00,0.00}}
+\newcommand\hdim{\dim_{\mathrm H}}
+\newtheorem{lem}{Lemma}[section]
+\newtheorem{nt}[lem]{Notation}
+\newtheorem{dfn}[lem]{Definition}
+\newtheorem{pro}[lem]{Proposition}
+\newtheorem{thm}[lem]{Theorem}
+\newtheorem{exa}[lem]{Example}
+\newtheorem{cor}[lem]{Corollary}
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\numberwithin{equation}{section}
+\def\N{\mathbb N}
+\def\Q{\mathbb Q}
+\def\R{\mathbb R}
+\def\Z{\mathbb Z}
+\def\vep{\varepsilon}
+%=========================================================================================
+%\setbeamercovered{transparent}
+%
+% The following info should normally be given in you main file:
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                           定制幻灯片---重定义字体、字号命令                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\song}{\CJKfamily{song}}    % 宋体   (Windows自带simsun.ttf)
+\newcommand{\fs}{\CJKfamily{fs}}        % 仿宋体 (Windows自带simfs.ttf)
+\newcommand{\kai}{\CJKfamily{kai}}      % 楷体   (Windows自带simkai.ttf)
+\newcommand{\hei}{\bf}      % 黑体   (Windows自带simhei.ttf)
+\newcommand{\li}{\CJKfamily{li}}        % 隶书   (Windows自带simli.ttf)
+\newcommand{\you}{\CJKfamily{you}}      % 幼圆   (Windows自带simyou.ttf)
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}     % 字号设置
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont} % 字号设置
+\newcommand{\yichu}{\fontsize{32pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\erhao}{\fontsize{21pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}    % 字号设置
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}   % 字号设置
+\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}    % 字号设置
+
+%======================= 标题名称中文化 ============================%
+\newtheorem{dingyi}{\hei 定义~}[section]
+\newtheorem{dingli}{\hei 定理~}[section]
+\newtheorem{yinli}[dingli]{\hei 引理~}
+\newtheorem{tuilun}[dingli]{\hei 推论~}
+\newtheorem{mingti}[dingli]{\hei 命题~}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \usepackage{beamerthemesplit} // Activate for custom appearance
+
+
+\title{\textsc{第5章\ \ \ 特征值}}
+\author{郑州大学数学与统计学院 线性代数教研室}
+\date{}
+
+\begin{document}
+\begin{CJK}{UTF8}{gbsn}
+\frame{\titlepage}
+
+\begin{frame}\frametitle{目录}
+ \tableofcontents
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[5.1]{5.1 特征值与特征向量}
+
+\begin{frame}
+ \ \ \ \ {\hei 定义~5.1} 设$P$为一个数域，$\bm A$为$P$上的$n$阶方阵，若存在数$\lambda\in P$及$n$维非零(列)向量$\bm X\in P^n$，使
+ $$\bm{AX}=\lambda\bm X,$$
+ 则称$\lambda$是$\bm A$的一个{\hei 特征值}，$\bm X$是属于$\lambda$的一个{\hei 特征向量}。
+ \pause\vskip 10pt
+ \ \ \ \ 易知：(1) 若$\bm X$是$\bm A$属于$\lambda$的特征向量，则对任意非零数$c\in P$，$c\bm X$也是$\bm A$属于$\lambda$的特征向量；
+ \vskip 5pt
+ \ \ \ \ (2) 对应于一个特征向量的特征值是唯一的，而对应于一个特征值的特征向量有无穷多个；
+ \vskip 5pt
+ \ \ \ \ (3) 若$\bm X_1,\bm X_2$都是$\bm A$属于特征值$\lambda$的特征向量，且$\bm X_1+\bm X_2\neq 0$，则$\bm X_1+\bm X_2$也是$\bm A$属于特征值$\lambda$的特征向量。
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ 综合(1),(2),(3), 不难得到
+ \vskip 5pt
+ \ \ \ \  {\hei 命题} 设$\lambda\in P$是$P$上$n$阶方阵$\bm A$的一个特征值，则$\bm A$属于$\lambda$的全体特征向量添上零向量按向量的加法和数乘运算作成$P^n$的一个子空间，称为$\bm A$关于特征值$\lambda$ 的{\hei 特征子空间}。
+
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ 下面讨论如何求$\bm A$的特征值与特征向量。由定义知
+ $$(\lambda\bm E-\bm A)\bm X=\bm 0,$$
+ 即
+ $$\left[\begin{matrix}\lambda-a_{11}&-a_{12}&\cdots&-a_{1n}\\-a_{21}&\lambda-a_{22}&\cdots&-a_{2n}\\\vdots&\vdots&&\vdots\\-a_{n1}&-a_{n2}&\cdots&\lambda-a_{nn}\end{matrix}\right]
+ \left[\begin{matrix}x_1\\x_2\\\vdots\\x_n\end{matrix}\right]= \left[\begin{matrix}0\\0\\\vdots\\0\end{matrix}\right].$$
+ \pause\vskip 5pt
+ 可以看出，$\lambda$为$\bm A$的特征值，且$\bm X$是$\bm A$属于$\lambda$的特征向量的充要条件是$(\lambda\bm E-\bm A)\bm X=\bm 0$有非零解，即$|\lambda\bm E-\bm A|=0$.
+ \pause\vskip 5pt
+ \ \ \ \ 显然，$\bm A$关于$\lambda$的特征子空间就是$(\lambda\bm E-\bm A)\bm X=\bm 0$的解空间，其维数为$n-r(\lambda\bm E-\bm A)$。
+
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 定义~5.2} 设$\bm A$为$P$上的$n$阶方阵，$\lambda$为未定元。则称$\lambda\bm E-\bm A$为$\bm A$的{\hei 特征矩阵}，称行列式$|\lambda\bm E-\bm A|$为$\bm A$的{\hei 特征多项式}，又称$n$次代数方程$|\lambda\bm E-\bm A|=0$为$\bm A$的{\hei 特征方程}。
+ \pause\vskip 10pt
+ \ \ \ \ 因此，数$\lambda$为$\bm A$的特征值的充要条件是$\lambda$为特征方程$|\lambda\bm E-\bm A|=0$的根。所以，特征值又称为{\hei 特征根}。它由$\bm A$唯一确定，而属于$\lambda$的特征向量$\bm X$是$(\lambda\bm E-\bm A)\bm X=\bm 0$的非零解，当然也是由$\bm A$所确定的。
+  \pause\vskip 5pt
+ \ \ \ \ 当然，对于给定的数域$P$，不是所有的方阵都有特征值！
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ 下面的定理揭示了特征值与原矩阵的关系。
+ \vskip 5pt
+ \ \ \ \ {\hei 定理~5.1} 设$\bm A$为$P$上的$n$阶方阵，且$\bm A=(a_{ij})_{nn}$在$P$上有$n$个特征值$\lambda_1,\lambda_2,\cdots,\lambda_n$(重根按重数计算)，则
+ \vskip 5pt
+ \ \ \ \ (1) $|\bm A|=\lambda_1\lambda_2\cdots\lambda_n$;
+ \vskip 5pt
+ \ \ \ \ (2) $\bm A$的主对角线元素之和称为$\bm A$的{\hei 迹}，记为tr$\bm A$，
+ $$\mathrm{tr}\bm A=a_{11}+a_{22}+\cdots+a_{nn}=\lambda_1+\lambda_2+\cdots+\lambda_n.$$
+ \pause
+ \ \ \ \ {\hei 证明} (1) 因为$\lambda_1,\cdots,\lambda_n$为特征方程$|\lambda\bm E-\bm A|=0$的根，所以特征多项式
+ $$|\lambda\bm E-\bm A|=(\lambda-\lambda_1)(\lambda-\lambda_2)\cdots(\lambda-\lambda_n).$$
+ 令$\lambda=0$，得$|-\bm A|=(-1)^n\lambda_1\lambda_2\cdots\lambda_n$，从而结论(1)成立。
+ \end{frame}
+
+\begin{frame}
+ \ \ \ \ (2) 先计算$|\lambda\bm E-\bm A|$中$\lambda^{n-1}$的系数。\\
+ \vskip 5pt
+ \ \ \ \ 可以看出，$|\lambda\bm E-\bm A|$中$\lambda^{n-1}$的系数与$(\lambda-a_{11})(\lambda-a_{22})\cdots(\lambda-a_{nn})$中$\lambda^{n-1}$ 的系数相同，都是$-(a_{11}+a_{22}+\cdots+a_{nn})$. 而$(\lambda-\lambda_1)(\lambda-\lambda_2)\cdots(\lambda-\lambda_n)$中$\lambda^{n-1}$的系数为$-(\lambda_1+\lambda_2+\cdots+\lambda_n)$. 由(1)的证明知
+ \vskip 1pt
+\hspace{6em}  $a_{11}+a_{22}+\cdots+a_{nn}=\lambda_1+\lambda_2+\cdots+\lambda_n.$
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 例~1} 在有理数域$\bm Q$上求方阵$\bm A=\left[\begin{matrix}3&1\\5&-1\end{matrix}\right]$的特征值与特征向量。
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 解} 由$|\lambda\bm E-\bm A|=\left|\begin{matrix}\lambda-3&-1\\-5&\lambda+1\end{matrix}\right|=(\lambda-4)(\lambda+2)$，得$\bm A$的两个特征值$4,-2$.
+ \pause\vskip 5pt
+ \ \ \ \ 将$\lambda=4$代入$(\lambda\bm E-\bm A)\bm X=\bm 0$，得
+ $$\left\{\begin{array}{r}
+ x_1-x_2=0,\\-5x_1+5x_2=0.
+ \end{array}\right.$$
+ 其基础解系是$\bm X_1=\left[\begin{matrix}1\\1\end{matrix}\right]$，所以属于$\lambda=4$的全部特征向量是$k\left[\begin{matrix}1\\1\end{matrix}\right],$ $k\neq0$是任意常数。
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ 将$\lambda=-2$代入$(\lambda\bm E-\bm A)\bm X=\bm 0$，得
+ $$\left\{\begin{array}{r}
+ -5x_1-x_2=0,\\-5x_1-x_2=0.
+ \end{array}\right.$$
+ 其基础解系是$\bm X_2=\left[\begin{matrix}1\\-5\end{matrix}\right]$，所以属于$\lambda=-2$的全部特征向量是$l\left[\begin{matrix}1\\-5\end{matrix}\right],~l\neq0$是任意常数。
+\end{frame}
+\begin{frame}
+ \ \ \ \ {\hei 例~2} 在有理数域$\bm Q$上求方阵$\bm A=\left[\begin{matrix}1&1&0\\0&1&0\\0&0&1\end{matrix}\right]$的特征值与特征向量。
+ \pause\vskip 2pt
+ \ \ \ \ {\hei 解} 由
+ $$|\lambda\bm E-\bm A|=\left|\begin{matrix}\lambda-1&-1&0\\0&\lambda-1&0\\0&0&\lambda-1\end{matrix}\right|=(\lambda-1)^3,$$
+ 得$\bm A$的特征值是$\lambda_1=\lambda_2=\lambda_2=1.$
+ \end{frame}
+\begin{frame}
+ \ \ \ \ 将$\lambda=1$代入$(\lambda\bm E-\bm A)\bm X=\bm 0$，得$x_2=0$，其基础解系是
+ $$\bm X_1=\left[\begin{matrix}1\\0\\0\end{matrix}\right],~~~\bm X_2=\left[\begin{matrix}0\\0\\1\end{matrix}\right].$$
+ 所以属于特征值1的全部特征向量是
+ $$k_1\left[\begin{matrix}1\\0\\0\end{matrix}\right]+k_2\left[\begin{matrix}0\\0\\1\end{matrix}\right],~~~k_1,k_2\mbox{不全为零}.$$
+\end{frame}
+\begin{frame}
+
+ {\hei 例~3} 在复数域$\bm C$上求复矩阵$\bm A=\left[\begin{matrix}1&2&2\\1&-1&1\\-4&12&1\end{matrix}\right]$的特征值与特征向量。\\
+ \pause
+ \ \ {\hei 解} 由
+  $|\lambda\bm E-\bm A|=\left|\begin{matrix}\lambda-1&-2&-2\\-1&\lambda+1&-1\\-4&12&\lambda-1\end{matrix}\right|=(\lambda-1)(\lambda+\mathrm i)(\lambda-\mathrm i),$\\
+  得$\bm A$的特征值是$1,\mathrm i,-\mathrm i$. \pause 分别代入$(\lambda\bm E-\bm A)\bm X=\bm 0$，得
+  \vskip 2pt属于特征值1的全部特征向量是$k_1\left[\begin{matrix}3\\1\\-1\end{matrix}\right],~~~k_1\neq0;$
+  \vskip 2pt属于特征值$\mathrm i$的全部特征向量是$k_2\left[\begin{matrix}4+2\mathrm i\\1+\mathrm i\\-4\end{matrix}\right],~~~k_2\neq0;$
+  \vskip 2pt属于特征值$-\mathrm i$的全部特征向量是$k_3\left[\begin{matrix}4-2\mathrm i\\1-\mathrm i\\-4\end{matrix}\right],~~~k_3\neq0;$
+\end{frame}
+
+\section[5.2]{5.2 矩阵的相似}
+
+\begin{frame}
+\ \ \ \ {\hei 定义~5.3} 设$\bm A,\bm B$为数域$P$上$n$阶方阵，若存在$P$上$n$阶可逆矩阵$\bm C$，使$\bm C^{-1}\bm A\bm C=\bm B$，则称$\bm A$与$\bm B${\hei 相似}，记作$\bm A\overset{C}\sim\bm B$ 或$\bm A\sim\bm B$或$\bm A\overset{P}\sim\bm B$.
+\pause\vskip 10pt
+\ \ \ \ 矩阵相似是矩阵等价的特殊情况，它当然也保持矩阵的秩不变。此外，它还有类似于矩阵等价的三个性质：
+\vskip 2pt
+\ \ \ \ (1) 自反性：对任意方阵$\bm A$，有$\bm A\overset{E}\sim\bm A$;
+\vskip 2pt
+\ \ \ \ (2) 对称性：若$\bm A\overset{C}\sim\bm B$，则$\bm B\overset{C^{-1}}\sim\bm A$;
+\vskip 2pt
+\ \ \ \ (3) 传递性：若$\bm A\overset{C_1}\sim\bm B,\bm B\overset{C_2}\sim\bm C$，则$\bm A\overset{C_1C_2}\sim\bm C$.
+\end{frame}
+
+\begin{frame}
+\ \ \ \ 矩阵相似还有下面重要的性质：
+\vskip 5pt
+\ \ \ \ {\hei 定理~5.2} (1) 相似矩阵有相同的特征多项式，当然也有相同的特征值(重根按重数计算)；
+\vskip 2pt
+\ \ \ \ (2) 相似矩阵的行列式相等；
+\vskip 2pt
+\ \ \ \ (3) 相似矩阵有相同的迹，即两个相似矩阵的主对角线上元素之和相等。
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 定理~5.3} 数域$P$上$n$阶方阵$\bm A$相似于对角矩阵的充要条件是$\bm A$在数域$P$上有$n$个线性无关的特征向量。
+\pause\vskip 10pt
+\ \ \ \ {\hei 证明} 必要性. 设存在数域$P$上可逆矩阵$\bm C$，使
+$$\bm C^{-1}\bm{AC}=\left[\begin{matrix}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_n\end{matrix}\right],~~~\mbox{则}~~
+\bm{AC}=\bm C\left[\begin{matrix}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_n\end{matrix}\right]$$
+\end{frame}
+
+\begin{frame}
+把$\bm C$按列分块，得$\bm C=(\bm X_1,\bm X_2,\cdots,\bm X_n)$. 于是有
+$$\bm A(\bm X_1,\bm X_2,\cdots,\bm X_n)=(\bm X_1,\bm X_2,\cdots,\bm X_n)\left[\begin{matrix}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_n\end{matrix}\right],$$
+即
+$(\bm{AX}_1,\bm{AX}_2,\cdots,\bm{AX}_n)=(\lambda_1\bm X_1,\lambda_2\bm X_2,\cdots,\lambda_n\bm X_n)$，故$\bm{AX}_i$ $=\lambda_i\bm X_i$
+
+\pause\vskip 5pt
+\ \ \ \ 由于$\bm C$可逆，所以$\bm C$的列向量组$\bm X_1,\bm X_2,\cdots,\bm X_n$线性无关。注意到$\bm X_i\neq0$，所以$\bm X_1,\bm X_2,\cdots,\bm X_n$就是矩阵$\bm A$在数域$P$上$n$个线性无关的特征向量。
+
+\end{frame}
+
+\begin{frame}\small
+\vskip 5pt
+\ \ \ \ 充分性. 设$n$阶方阵$\bm A$在数域$P$上有$n$个线性无关的特征向量$\bm X_1,\bm X_2,\cdots,$ $\bm X_n$，它们对应的特征值分别为$\lambda_1,\lambda_2,\cdots,\lambda_n\in P$.
+\vskip 5pt
+\ \ \ \ 令$\bm C=(\bm X_1,\bm X_2,\cdots,\bm X_n)$，则$\bm C$为数域$P$上可逆矩阵，且
+\begin{eqnarray*}
+\bm C^{-1}\bm{AC}&=&\bm C^{-1}\bm A(\bm X_1,\bm X_2,\cdots,\bm X_n)=\bm C^{-1}(\bm A\bm X_1,\bm A\bm X_2,\cdots,\bm A\bm X_n)\\
+&=&\bm C^{-1}(\lambda_1\bm X_1,\lambda_2\bm X_2,\cdots,\lambda_n\bm X_n) \\
+&=&\bm C^{-1}(\bm X_1,\bm X_2,\cdots,\bm X_n)\left[\begin{matrix}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_n\end{matrix}\right]\\
+&=&\left[\begin{matrix}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_n\end{matrix}\right].
+\end{eqnarray*}
+\end{frame}
+
+
+\begin{frame}\small
+\ \ \ \ 下面定理表明，属于不同特征值的特征向量线性无关。
+\vskip 2pt
+\ \ \ \ {\hei 定理~5.4} 设$\lambda_1,\lambda_2,\cdots,\lambda_s\in P$是矩阵$\bm A$在$P$中的$s$个互异的特征值。若对每个特征值$\lambda_k$，$\bm A$有$m_k$个线性无关的特征向量$\bm X_{k1},\bm X_{k2},\cdots,\bm X_{km_k}$, $k=1,2,\cdots,s$，则向量组$\bm X_{11},\cdots,\bm X_{1m_1},\bm X_{21},\cdots,\bm X_{2m_2},\cdots,\bm X_{s1},\cdots$, $\bm X_{sm_s}$也线性无关。
+\pause\vskip 5pt
+\ \ \ \ {\hei 证明} 对$s$用数学归纳法。当$s=1$时显然成立。假设定理5.4对$s-1$成立，即已知向量组$\bm X_{11},\cdots,\bm X_{1m_1},\cdots,\bm X_{s-1,1},\cdots,\bm X_{s-1,m_{s-1}}$线性无关。令
+$$\hspace{3cm}\sum_{i=1}^s\sum_{j=1}^{m_i}k_{ij}\bm X_{ij}=\bm0,~~~k_{ij}\in P,\hspace{3cm}(5)$$
+则有
+\begin{eqnarray*}
+\bm A\Big(\sum_{i=1}^s\sum_{j=1}^{m_i}k_{ij}\bm X_{ij}\Big)=\sum_{i=1}^s\sum_{j=1}^{m_i}k_{ij}\lambda_i\bm{X}_{ij}=\bm0,&&\\
+\lambda_s\sum_{i=1}^s\sum_{j=1}^{m_i}k_{ij}\bm X_{ij}=\sum_{i=1}^s\sum_{j=1}^{m_i}k_{ij}\lambda_s\bm X_{ij}=\bm0.&&
+\end{eqnarray*}
+
+\end{frame}
+
+\begin{frame}
+两式相减，得
+$$\sum_{i=1}^{s-1}\sum_{j=1}^{m_i}k_{ij}(\lambda_i-\lambda_s)\bm X_{ij}=\bm0.$$
+由归纳假设得$k_{ij}(\lambda_i-\lambda_s)=0,~i=1,\cdots,s-1,~j=1,\cdots,m_i$. 由于$\lambda_i\neq\lambda_s$, 故$k_{ij}=0,~i=1,\cdots,s-1,~j=1,\cdots,m_i$. 代入(5)式，得
+$$\sum_{j=1}^{m_s}k_{sj}\bm X_{sj}=\bm0.$$
+又因为$\bm X_{s1},\cdots,\bm X_{sm_s}$线性无关，所以$k_{sj}=0,~j=1,\cdots,m_s$. 故向量组$\bm X_{11},\cdots,\bm X_{1m_1},\bm X_{21},\cdots,\bm X_{2m_2},\cdots,\bm X_{s1},\cdots$, $\bm X_{sm_s}$线性无关。$\hfill\Box$
+\end{frame}
+\begin{frame}
+\ \ \ \ 设数域$P$上$n$阶矩阵$\bm A$有特征值$\lambda\in P$，相应的特征子空间记为$V_\lambda$，我们称$V_\lambda$的维数dim$V_\lambda$为$\bm A$的特征值$\lambda$在$P$上的{\hei 几何重数}，\pause 称特征值(根)作为$\bm A$的特征多项式的根的重数为$\bm A$的特征值$\lambda$在$P$上的{\hei 代数重数}。实际上，dim$V_\lambda=n-r(\lambda\bm E-\bm A)$.
+\pause\vskip 5pt
+\ \ \ \ 我们不加证明地给出
+\vskip 5pt
+\ \ \ \ {\hei 定理~5.5} 设$\bm A$为数域$P$上$n$阶矩阵，则存在$P$上可逆矩阵$\bm C$，使$\bm C^{-1}\bm{AC}$为对角矩阵的充要条件是下列各式都成立：
+\vskip 5pt
+\ \ \ \ (1) $\bm A$在$P$上有$n$个特征值(重根按重数计算);
+\vskip 5pt
+\ \ \ \ (2) 对于$\bm A$在$P$上的每个特征根$\lambda$，其代数重数都等于几何重数。
+\end{frame}
+
+\begin{frame}\small
+\ \ \ \ {\hei 例~1} 设$\bm A=\left[\begin{matrix}1&2&2\\2&1&2\\2&2&1\end{matrix}\right]$，求可逆矩阵$\bm C$，使$\bm C^{-1}\bm{AC}$为对角阵。
+\pause\vskip 5pt
+\ \ \ \ {\hei 解}
+$$|\lambda\bm E-\bm A|=\left|\begin{matrix}\lambda-1&-2&-2\\-2&\lambda-1&-2\\-2&-2&\lambda-1\end{matrix}\right|=(\lambda-5)(\lambda+1)^2,$$
+所以$\bm A$在任意数域$P$上有特征值~5, $-1$(2重根).
+\pause\vskip 5pt
+\ \ \ \ 将$\lambda=5$代入$(\lambda\bm E-\bm A)\bm X=0$，得
+$$\left[\begin{matrix}4&-2&-2\\-2&4&-2\\-2&-2&4\end{matrix}\right]\left[\begin{matrix}x_1\\x_2\\x_3\end{matrix}\right]=\left[\begin{matrix}0\\0\\0\end{matrix}\right].$$
+由此可得属于$\lambda=5$的一个线性无关的特征向量$\left[\begin{matrix}1\\1\\1\end{matrix}\right].$
+\end{frame}
+\begin{frame}
+\ \ \ \ 将$\lambda=-1$代入$(\lambda\bm E-\bm A)\bm X=0$，得
+$$\left[\begin{matrix}-2&-2&-2\\-2&-2&-2\\-2&-2&-2\end{matrix}\right]\left[\begin{matrix}x_1\\x_2\\x_3\end{matrix}\right]=\left[\begin{matrix}0\\0\\0\end{matrix}\right].$$
+由此可得属于$\lambda=-1$的两个线性无关的特征向量$\left[\begin{matrix}1\\-1\\0\end{matrix}\right],~\left[\begin{matrix}1\\0\\-1\end{matrix}\right].$
+\pause\vskip 5pt
+\ \ \ \ 由定理5.4知上面三个特征向量线性无关。令$\bm C=\left[\begin{matrix}1&1&1\\1&-1&0\\1&0&-1\end{matrix}\right]$，则$\bm C$可逆，且
+$$\bm C^{-1}\bm{AC}=\left[\begin{matrix}5&&\\&-1&\\&&-1\end{matrix}\right].$$
+$\hfill\Box$
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 例~2} 设$\bm A=\left[\begin{matrix}3&1&0\\-4&-1&0\\4&-8&-2\end{matrix}\right]$，则$\bm A$不与对角矩阵相似。
+\pause\vskip 5pt
+\ \ \ \ {\hei 证明} 由于$|\lambda\bm E-\bm A|=\left|\begin{matrix}\lambda-3&-1&0\\4&\lambda+1&0\\-4&8&\lambda+2\end{matrix}\right|=(\lambda+2)(\lambda-1)^2$，则$\bm A$任意数域$P$上有特征值~$-2,~1$ (2重根).
+\vskip 2pt
+\ \ \ \ 将$\lambda=-2$代入$(\lambda\bm E-\bm A)\bm X=0$，得
+$$\left[\begin{matrix}-5&-1&0\\4&-1&0\\-4&8&0\end{matrix}\right]\left[\begin{matrix}x_1\\x_2\\x_3\end{matrix}\right]=\left[\begin{matrix}0\\0\\0\end{matrix}\right].$$
+由此可得属于$\lambda=-2$的一个线性无关的特征向量$\left[\begin{matrix}0\\0\\1\end{matrix}\right].$
+\end{frame}
+\begin{frame}
+\ \ \ \ 将$\lambda=1$代入$(\lambda\bm E-\bm A)\bm X=0$，得
+$$\left[\begin{matrix}-2&-1&0\\4&2&0\\-4&8&3\end{matrix}\right]\left[\begin{matrix}x_1\\x_2\\x_3\end{matrix}\right]=\left[\begin{matrix}0\\0\\0\end{matrix}\right].$$
+由此可得属于$\lambda=1$的一个线性无关的特征向量$\left[\begin{matrix}3\\-6\\20\end{matrix}\right].$
+\pause\vskip 5pt
+\ \ \ \ 由于$\bm A$在任意数域$P$上没有三个线性无关的特征向量，所以$\bm A$不与对角矩阵相似。
+
+\end{frame}
+\begin{frame}
+\ \ \ \ 利用定理5.3和定理5.4，不难得到下列关于矩阵对角化(相似于对角矩阵)的充分条件。
+\vskip 5pt
+\ \ \ \ {\hei 推论~1} 若数域$P$上$n$阶矩阵$\bm A$在$P$上有$n$个互异的特征值，则存在数域$P$上可逆矩阵$\bm C$，使$\bm C^{-1}\bm{AC}$为对角矩阵。
+\pause\vskip 5pt
+\ \ \ \ {\hei 推论~2} 若$n$阶复矩阵$\bm A$的特征多项式没有重根，则$\bm A$在复数域上与对角矩阵相似。
+\vskip 10pt
+\ \ \ \ 上述两个推论的逆命题不成立。
+\end{frame}
+
+\section[5.3]{5.3 实对称矩阵的相似标准形}
+
+\begin{frame}{正交向量组}
+\ \ \ \ {\hei 定义~5.4} 设$\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_m$是$n$维欧氏空间$\mathbf R^n$中非零向量。如果它们两两正交，则称$\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_m$为一个{\hei 正交向量组}，并规定由一个非零向量所组成的向量组是正交的。若每个$\bm\alpha_i$都是单位向量，则称$\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_m$为一个{\hei 单位正交向量组}。
+\pause\vskip 2pt
+\ \ \ \ 特别地，如果$\{\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_n\}$是$\mathbf R^n$的一个基，且为正交向量组，则称$\{\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_n\}$为$\mathbf R^n$的一个{\hei 正交基}。
+\pause\vskip 2pt
+\ \ \ \ 又若$\{\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_n\}$是一个正交基，且每个$\bm\alpha_i$都是单位向量，则称$\{\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_n\}$是$\mathbf R^n$的一个{\hei 标准正交基}(或{\hei 规范正交基})。
+\end{frame}
+\begin{frame}
+\ \ \ \ {\hei 例~1} $\mathbf R^n$中基本向量组$\bm\varepsilon_1=(1,0,\cdots,0), \bm\varepsilon_2=(0,1,\cdots,0),\cdots,$ $\bm\varepsilon_n=(0,0,\cdots,1)$是$\mathbf R^n$的一个标准正交基。
+\pause\vskip 10pt
+\ \ \ \ {\hei 定理~5.6} 正交向量组必是线性无关的。
+
+\end{frame}
+
+\begin{frame}{正交矩阵}
+\ \ \ \ {\hei 定义~5.5} 设$\bm A$为$n$阶实矩阵，如果$\bm A$满足
+$$\bm A'\bm A=\bm E,$$
+则称$\bm A$为{\hei 正交矩阵}。
+\pause\vskip 5pt
+\ \ \ \ 例如，单位矩阵$\bm E$是正交矩阵；平面解析几何中直角坐标变换公式
+$$\left[\begin{matrix}x\\y\end{matrix}\right]=\left[\begin{matrix}\cos\theta&-\sin\theta\\ \sin\theta&~~~\cos\theta\end{matrix}\right]
+\left[\begin{matrix}x'\\y'\end{matrix}\right]$$
+对应的矩阵$\left[\begin{matrix}\cos\theta&-\sin\theta\\ \sin\theta&~~~\cos\theta\end{matrix}\right]$也是正交矩阵。
+
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 定理~5.7} 实$n$阶矩阵$\bm A$是正交矩阵的充要条件是它的列(行)向量组是$n$维欧氏空间$\mathbf R^n$的一个单位正交向量组。
+\pause\vskip 10pt
+\ \ \ \ 由定理5.7不难看出，实$n$阶矩阵$\bm A$为正交矩阵的充要条件是它的列(行)向量组是$n$维欧氏空间$\mathbf R^n$的一个标准正交基。
+
+
+\end{frame}
+
+\begin{frame}{施密特(Schmidt)正交化方法}\small
+设$\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_m$为线性无关的向量组，令
+\begin{eqnarray*}
+\bm\beta_1&=&\bm\alpha_1,\\
+\bm\beta_2&=&\bm\alpha_2-\frac{(\bm\alpha_2,\bm\beta_1)}{(\bm\beta_1,\bm\beta_1)}\bm\beta_1,\\
+\bm\beta_3&=&\bm\alpha_3-\frac{(\bm\alpha_3,\bm\beta_1)}{(\bm\beta_1,\bm\beta_1)}\bm\beta_1-\frac{(\bm\alpha_3,\bm\beta_2)}{(\bm\beta_2,\bm\beta_2)}\bm\beta_2,\\
+&\vdots&\\
+\bm\beta_m&=&\bm\alpha_m-\frac{(\bm\alpha_m,\bm\beta_1)}{(\bm\beta_1,\bm\beta_1)}\bm\beta_1-\frac{(\bm\alpha_m,\bm\beta_2)}{(\bm\beta_2,\bm\beta_2)}\bm\beta_2-\cdots
+-\frac{(\bm\alpha_m,\bm\beta_{m-1})}{(\bm\beta_{m-1},\bm\beta_{m-1})}\bm\beta_{m-1},
+\end{eqnarray*}
+则$\bm\beta_1,\bm\beta_2,\cdots,\bm\beta_m$是与$\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_m$等价的正交向量组。\pause 再单位化即得单位正交向量组
+$$\bm\gamma_1=\frac{\bm\beta_1}{|\bm\beta_1|},~~~\bm\gamma_2=\frac{\bm\beta_2}{|\bm\beta_2|},~~~\cdots~~~\bm\gamma_m=\frac{\bm\beta_m}{|\bm\beta_m|}.$$
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 注} 实际上，上述正交化方法是从非零向量$\bm\alpha_1$出发，令$\bm\beta_1=\bm\alpha_1$.
+\vskip 5pt
+\ \ \ \ 再由$\bm\beta_1,\bm\alpha_2$出发找$\bm\beta_2$，使$(\bm\beta_1,\bm\beta_2)=0$. 令$\bm\beta_2=\bm\alpha_2+k\bm\beta_1$，则由$(\bm\beta_1,\bm\beta_2)=0$可得$k=-\frac{(\bm\alpha_2,\bm\beta_1)}{(\bm\beta_1,\bm\beta_1)}$, 故$\bm\beta_2=\bm\alpha_2-\frac{(\bm\alpha_2,\bm\beta_1)}{(\bm\beta_1,\bm\beta_1)}\bm\beta_1$.
+\pause\vskip 5pt
+\ \ \ \ 再由$\bm\beta_1,\bm\beta_2,\bm\alpha_3$出发找$\bm\beta_3$，使$(\bm\beta_1,\bm\beta_3)=0,(\bm\beta_2,\bm\beta_3)=0$. 令$\bm\beta_3=\bm\alpha_2+k_1\bm\beta_1+k_2\bm\beta_2$，由$(\bm\beta_1,\bm\beta_3)=(\bm\beta_2,\bm\beta_3)=0$得$k_1=-\frac{(\bm\alpha_3,\bm\beta_1)}{(\bm\beta_1,\bm\beta_1)},~k_2=-\frac{(\bm\alpha_3,\bm\beta_2)}{(\bm\beta_2,\bm\beta_2)}$.
+\pause\vskip 5pt
+\ \ \ \ 如此进行下去，后面逐个求得的每个向量$\bm\beta_i$和前面的正交向量组$\bm\beta_1,\bm\beta_2,\cdots,\bm\beta_{i-1}$中的每个向量都正交。
+\pause\vskip 10pt
+\ \ \ \ {\hei 例~2} 把向量组$\bm\alpha_1=(0,1,1),~\bm\alpha_2=(1,0,1),~\bm\alpha_3=(1,1,0)$化为单位正交向量组。
+\end{frame}
+
+\begin{frame}{复$n$维向量空间的内积}
+\ \ \ \ 在复$n$维向量空间$\mathbf C^n$中，考虑如下二元函数
+$$(\bm X,\bm Y)=\bm X'\overline{\bm Y}=\overline{\bm Y}'\bm X,~~~\bm X,\bm Y\in\mathbf C^n.$$
+利用矩阵的运算法则，不难证明二元函数$(\cdot,\cdot)$满足
+\vskip 5pt
+\ \ \ \ (1) $(\bm X,\bm Y)=\overline{(\bm Y,\bm X)}$;
+\vskip 5pt
+\ \ \ \ (2) $(\bm X_1+\bm X_2,\bm Y)=(\bm X_1,\bm Y)+(\bm X_2,\bm Y),$\\
+\ \ \ \ \ \ \ \ \ $(\bm X,\bm Y_1+\bm Y_2)=(\bm X,\bm Y_1)+(\bm X,\bm Y_2)$;
+\vskip 5pt
+\ \ \ \ (3) $(\lambda\bm X,\bm Y)=\lambda(\bm X,\bm Y),~~~(\bm X,\lambda\bm Y)=\bar\lambda(\bm X,\bm Y)$;
+\vskip 5pt
+\ \ \ \ (4) 对任意向量$\bm X\in\mathbf C^n$, $(\bm X,\bm X)$为非负实数，且$(\bm X,\bm X)=0$当且仅当$\bm X=0$.
+\pause\vskip 5pt
+\ \ \ \ 我们把上述二元函数称为$\mathbf C^n$中向量的{\hei 内积}，又把引入内积运算之后的复$n$维向量空间$\mathbf C^n$称为{\hei 酉空间}。
+
+\end{frame}
+
+\begin{frame}
+\ \ \ \ 可以证明，对任意$\bm X,\bm Y\in\mathbf C^n$和$n$阶实矩阵$\bm A$，都有
+\vskip 5pt
+\ \ \ \  (1) $(\bm{AX},\bm Y)=(\bm X,\bm A'\bm Y)$.\\ 特别地，若$\bm A$为实对称矩阵，则有$(\bm{AX},\bm Y)=(\bm X,\bm A\bm Y)$;
+\vskip 5pt
+\ \ \ \  (2) 若$\bm A$为正交矩阵，则有$(\bm{AX},\bm{AY})=(\bm X,\bm Y)$.
+\pause\vskip 10pt
+\ \ \ \ 对于实对称矩阵有下面两个引理：
+\vskip 5pt
+\ \ \ \ {\hei 引理~1} 实对称矩阵$\bm A$的特征值必为实数，并且对于它的每一个实特征值，$\bm A$都有实特征向量。
+\pause\vskip 5pt
+\ \ \ \ {\hei 引理~2} 实对称矩阵$\bm A$属于不同特征值的(实)特征向量正交。
+\end{frame}
+\begin{frame}
+\ \ \ \ 下面引理表明，任意一个单位正交向量组都可以扩充为$\mathbf R^n$的一个标准正交基。
+\vskip 5pt
+\ \ \ \ {\hei 引理~3} 若$\bm\eta_1,\bm\eta_2,\cdots,\bm\eta_s~(s\leq n)$是任意一个单位正交向量组，则可以用这$s$个向量为前$s$列作出一个$n$阶正交矩阵。
+\pause\vskip 5pt
+\ \ \ \ {\hei 证明$^*$} 令矩阵$\bm A=(\bm\eta_1',\bm\eta_2',\cdots,\bm\eta_s')^\top$, 则$r(\bm A)=s$.
+ \vskip 5pt
+\ \ \ \ 不妨设$s<n$，则齐次线性方程组$\bm A\bm X=0$有基础解系，且基础解系令有$n-s$个解向量，记为$\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_{n-s}$. 把$\bm\alpha_1,\bm\alpha_2,\cdots,$ $\bm\alpha_{n-s}$ 正交化再单位化，得到与之等价的单位正交向量组$\bm\eta_{s+1},\bm\eta_{s+2},$ $\cdots,\bm\eta_n$. 又因为$\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_{n-s}$中每个向量都与$\bm\eta_1,\bm\eta_2,\cdots,\bm\eta_s$ 正交，
+所以$\bm\eta_1,\cdots,\bm\eta_s,\bm\eta_{s+1},\cdots,\bm\eta_n$为单位正交向量组，从而得到一个$n$阶正交矩阵$(\bm\eta_1,\cdots,\bm\eta_s,\bm\eta_{s+1},\cdots,\bm\eta_n).\hfill\Box$
+\end{frame}
+\begin{frame}
+\ \ \ \ {\hei 定理~5.8} 对任意$n$阶实对称矩阵$\bm A$，总可以找到$n$阶正交矩阵$\bm T$，使$\bm T^{-1}\bm{AT}=\bm T'\bm{AT}$为对角形，即
+$$\bm T^{-1}\bm{AT}=\bm T'\bm{AT}=\left[\begin{matrix}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_n\end{matrix}\right],$$
+其中$\lambda_1,\lambda_2,\cdots,\lambda_n$为$\bm A$的全体特征值。
+\end{frame}
+\begin{frame}
+\ \ \ \ {\hei 例~3} 设$\bm A=\left[\begin{matrix}2&-1&-1&1\\-1&2&1&-1\\-1&1&2&-1\\1&-1&-1&2\end{matrix}\right]$，求正交矩阵$\bm T$，使$\bm T^{-1}\bm{AT}$为对角矩阵。
+\pause\vskip 2pt
+\ \ \ \ {\hei 解} 由
+$$|\lambda\bm E-\bm A|=\left|\begin{matrix}\lambda-2&1&1&-1\\1&\lambda-2&-1&1\\1&-1&\lambda-2&1\\-1&1&1&\lambda-2\end{matrix}\right|=(\lambda-1)^3(\lambda-5),$$
+得$\bm A$的特征值为1(三重), 5.
+\pause\vskip 2pt
+\ \ \ \ 将$\lambda=1$代入$(\lambda\bm E-\bm A)\bm X=\bm0$，得
+$$\left[\begin{matrix}-1&1&1&-1\\1&-1&-1&1\\1&-1&-1&1\\-1&1&1&-1\end{matrix}\right]\left[\begin{matrix}x_1\\x_2\\x_3\\x_4\end{matrix}\right]
+=\left[\begin{matrix}0\\0\\0\\0\end{matrix}\right],$$
+\end{frame}
+
+\begin{frame}\small
+它的一个基础解系为
+$$\bm\alpha_1=\left[\begin{matrix}1\\1\\0\\0\end{matrix}\right],~~\bm\alpha_2=\left[\begin{matrix}1\\0\\1\\0\end{matrix}\right],
+~~\bm\alpha_3=\left[\begin{matrix}1\\0\\0\\-1\end{matrix}\right].$$
+\pause 正交化，得
+\begin{eqnarray*}
+\bm\beta_1&=&\bm\alpha_1=\left[\begin{matrix}1\\1\\0\\0\end{matrix}\right],\\
+\bm\beta_2&=&\bm\alpha_2-\frac{(\bm\alpha_2,\bm\beta_1)}{(\bm\beta_1,\bm\beta_1)}\bm\beta_1=\bm\alpha_2-\frac{1}{2}\bm\beta_1
+=\left[\begin{matrix}\frac{1}2\\-\frac{1}2\\1\\0\end{matrix}\right],\\
+\bm\beta_3&=&\bm\alpha_3-\frac{(\bm\alpha_3,\bm\beta_1)}{(\bm\beta_1,\bm\beta_1)}\bm\beta_1-\frac{(\bm\alpha_3,\bm\beta_2)}{(\bm\beta_2,\bm\beta_2)}\bm\beta_2
+=\bm\alpha_3-\frac{1}{2}\bm\beta_1-\frac{1}{3}\bm\beta_2=\left[\begin{matrix}\frac{1}3\\-\frac{1}3\\-\frac{1}3\\-1\end{matrix}\right].
+\end{eqnarray*}
+\end{frame}
+\begin{frame}\small
+再单位化，得
+\begin{equation*}
+\bm\gamma_1=\frac{\bm\beta_1}{|\bm\beta_1|}=\left[\begin{matrix}\frac{\sqrt2}2\\\frac{\sqrt2}2\\0\\0\end{matrix}\right],~~~
+\bm\gamma_2=\frac{\bm\beta_2}{|\bm\beta_2|}=\left[\begin{matrix}\frac{\sqrt6}6\\-\frac{\sqrt6}6\\\frac{\sqrt6}3\\0\end{matrix}\right],~~~
+\bm\gamma_3=\frac{\bm\beta_3}{|\bm\beta_3|}=\left[\begin{matrix}\frac{\sqrt3}6\\-\frac{\sqrt3}6\\-\frac{\sqrt3}6\\-\frac{\sqrt3}2\end{matrix}\right].
+\end{equation*}
+\pause\ \ \ \ 将$\lambda=5$代入$(\lambda\bm E-\bm A)\bm X=\bm0$，得
+$$\left[\begin{matrix}3&1&1&-1\\1&3&-1&1\\1&-1&3&1\\-1&1&1&3\end{matrix}\right]\left[\begin{matrix}x_1\\x_2\\x_3\\x_4\end{matrix}\right]
+=\left[\begin{matrix}0\\0\\0\\0\end{matrix}\right].$$
+它的一个基础解系为$\bm\alpha_4=\left[\begin{matrix}1\\-1\\-1\\1\end{matrix}\right]$. 单位化得$\bm\gamma_4=\left[\begin{matrix}\frac{1}2\\-\frac{1}2\\-\frac{1}2\\\frac{1}2\end{matrix}\right]$.
+\end{frame}
+\begin{frame}
+ 令
+ $$\bm T=(\bm\gamma_1,\bm\gamma_2,\bm\gamma_3,\bm\gamma_4)=\left[\begin{matrix}\frac{\sqrt2}2&\frac{\sqrt6}6&\frac{\sqrt3}6&\frac{1}2
+ \\\frac{\sqrt2}2&-\frac{\sqrt6}6&-\frac{\sqrt3}6&-\frac{1}2\\0&\frac{\sqrt6}3&-\frac{\sqrt3}6&-\frac{1}2\\0&0&-\frac{\sqrt3}2&\frac{1}2\end{matrix}\right],$$
+ 则$\bm T$为正交矩阵，且
+ $$\bm T^{-1}\bm{AT}=\left[\begin{matrix}1&&&\\&1&&\\&&1&\\&&&5\end{matrix}\right].$$ $\hfill\Box$
+\end{frame}
+
+\begin{frame}\small
+\ \ \ \ {\hei 注} 对于特征值$\lambda=1$，通过观察可知正交向量组
+$$\bm\eta_1=\left[\begin{matrix}1\\1\\1\\1\end{matrix}\right],~~~\bm\eta_2=\left[\begin{matrix}1\\-1\\1\\-1\end{matrix}\right],~~~
+\bm\eta_3=\left[\begin{matrix}1\\1\\-1\\-1\end{matrix}\right]$$
+是$(\lambda\bm E-\bm A)\bm X=\bm0$的一个基础解系，将它们单位化，得$\frac{1}2\bm\eta_1,\frac{1}2\bm\eta_2,\frac{1}2\bm\eta_3$.
+\pause\vskip 5pt
+\ \ \ \ 再结合特征值$\lambda=5$的单位特征向量$\frac{1}2\bm\eta_4~(\bm\eta_4=\bm\alpha_4)$，可得到正交矩阵
+$$\bm Q=\frac{1}2(\bm\eta_1,\bm\eta_2,\bm\eta_3,\bm\eta_4)=\frac{1}{2}\left[\begin{matrix}1&1&1&1\\1&-1&1&-1\\1&1&-1&-1\\1&-1&-1&1\end{matrix}\right],$$
+使
+$$\bm Q^{-1}\bm{AQ}=\left[\begin{matrix}1&&&\\&1&&\\&&1&\\&&&5\end{matrix}\right].$$
+\end{frame}
+
+\begin{frame}{小结}\small
+求正交矩阵$\bm T$，将实对称矩阵$\bm A$对角化的一般步骤：
+\vskip5pt
+1. 首先求$\bm A$的特征值；
+\vskip5pt
+2. 求每个特征值对应的一组线性无关的特征向量，即$(\lambda\bm E-\bm A)\bm X=\bm 0$的基础解系；
+\vskip5pt
+3. 将每个特征值对应的特征向量组正交化并单位化，便得到对应的单位正交向量组；
+\vskip5pt
+4. 将每个特征值对应的单位正交向量组按列组成一个矩阵，即为正交矩阵$\bm T$；
+\vskip5pt
+5. 利用正交矩阵$\bm T$将$\bm A$对角化，即
+$$\bm T^{-1}\bm{AT}=\bm T'\bm{AT}=\left[\begin{matrix}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_n\end{matrix}\right],$$
+其中$\lambda_1,\lambda_2,\cdots,\lambda_n$为$\bm A$的全体特征值。
+
+\end{frame}
+
+\section[5.4]{5.4 若尔当标准形简介}
+
+\begin{frame}{若尔当(Jordan)矩阵}\small
+\ \ \ \ {\hei 定义~5.6} 设$\lambda_i$为复数，形如
+$$\bm J_i=\left[\begin{matrix}\lambda_i&1&&\\&\lambda_i&\ddots&\\&&\ddots&1\\&&&\lambda_i\end{matrix}\right]$$
+的$m_i$阶矩阵($m_i\geq1$)叫做一个{\hei 若尔当块}。由若尔当块$\bm J_i$组成的准对角矩阵
+$$\left[\begin{matrix}\bm J_1&&&\\&\bm J_2&&\\&&\ddots&\\&&&\bm J_s\end{matrix}\right]$$
+称为一个{\hei 若尔当矩阵}。
+\pause\vskip 5pt
+\ \ \ \ 显然，对角矩阵是若尔当矩阵的特殊情况。
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 例~1} $\left[\begin{matrix}0&1\\0&0\end{matrix}\right],~\left[\begin{matrix}\sqrt2&1&0\\0&\sqrt2&1\\0&0&\sqrt2\end{matrix}\right],
+~\left[\begin{matrix}\mathrm i&1\\0&\mathrm i\end{matrix}\right]$都是若尔当块，而$\left[\begin{matrix}0&-1\\0&0\end{matrix}\right]$,\\$\left[\begin{matrix}\sqrt2&1&0\\0&\sqrt2&0\\0&0&\sqrt2\end{matrix}\right]$则不是若尔当块。
+\pause\vskip 5pt
+\ \ \ \ {\hei 例~2} $\left[\begin{matrix}1&1&0&0\\0&1&0&0\\0&0&0&1\\0&0&0&0\end{matrix}\right],~\left[\begin{matrix}\sqrt2&1&0&0&0\\0&\sqrt2&0&0&0\\0&0&\mathrm i&0&0\\0&0&0&\mathrm i&1\\
+0&0&0&0&\mathrm i\end{matrix}\right]$都是若尔当矩阵，\\
+而
+$\left[\begin{matrix}2&0&0&0&0\\0&\sqrt2&0&0&0\\0&0&\mathrm i&1&0\\0&0&0&\mathrm i&-1\\0&0&0&0&0\end{matrix}\right]$则不是若尔当矩阵。
+\end{frame}
+
+\begin{frame}
+\ \ \ \ 下面的定理通常称为若尔当定理。
+\vskip 5pt
+\ \ \ \ {\hei 定理~5.9} 任意一个复方阵$\bm A$都相似于一个若尔当矩阵，且该若尔当矩阵在各个若尔当块可以相差一个次序的意义下由$\bm A$唯一确定。因此，我们把这个若尔当矩阵$\bm J$称为复矩阵$\bm A$的{\hei 若尔当标准形}。
+\pause\vskip 5pt
+\ \ \ \ 显然，复矩阵$\bm A$相似于对角矩阵的充要条件是$\bm A$的若尔当标准形为对角矩阵。
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 例~3} 我们在5.2节例2中已证明$\bm A=\left[\begin{matrix}3&1&0\\-4&-1&0\\4&-8&-2\end{matrix}\right]$不相似于对角矩阵。取
+$$\bm T=\left[\begin{matrix}0&3&\frac{3}2\\0&-6&0\\1&20&-\frac{14}3\end{matrix}\right],$$
+则$\bm T$可逆，且$\bm T^{-1}\bm{AT}=\left[\begin{matrix}-2&0&0\\0&1&1\\0&0&1\end{matrix}\right]$.
+\pause\vskip 5pt
+\ \ \ \ {\hei 例~4} 令$\bm A=\left[\begin{matrix}-2&1&0\\-1&0&0\\-1&-1&1\end{matrix}\right],~\bm T=\left[\begin{matrix}-1&-2&0\\1&1&0\\1&0&1\end{matrix}\right]$，
+则$\bm T^{-1}\bm{AT}=\left[\begin{matrix}1&1&0\\0&1&0\\0&0&1\end{matrix}\right]$为$\bm A$的若尔当标准形。
+\end{frame}
+
+
+%=====================================================frame8=========================================
+
+
+\begin{frame}
+\begin{center}
+{\textcolor[rgb]{0.50,0.00,1.00}{\textbf{\xiaoerhao{Thanks for your attention!}}}}\bigskip
+\end{center}
+\end{frame}
+\end{CJK}
+\end{document}
+
+

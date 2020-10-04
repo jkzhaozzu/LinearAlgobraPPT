@@ -1,0 +1,400 @@
+\documentclass[compress,mathserif,cjk]{beamer}
+\usepackage{mathrsfs}
+\usepackage{color}
+\usepackage{CJK}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{extarrows}
+\usepackage{ulem}
+\usepackage{latexsym}
+\usepackage{pmat}
+
+% Copyright 2003 by Till Tantau <tantau@cs.tu-berlin.de>.
+%
+% This program can be redistributed and/or modified under the terms
+% of the LaTeX Project Public License Distributed from CTAN
+% archives in directory macros/latex/base/lppl.txt.
+
+%
+% The purpose of this example is to show how \part can be used to
+% organize a lecture.
+%
+\usetheme{Warsaw}
+  % 可供选择的主题参见 beameruserguide.pdf, 第 134 页起
+  % 无导航条的主题: Bergen, Boadilla, Madrid, Pittsburgh, Rochester;
+  % 有树形导航条的主题: Antibes, JuanLesPins, Montpellier;
+  % 有目录竖条的主题: Berkeley, PaloAlto, Goettingen, Marburg, Hannover;
+  % 有圆点导航条的主题: Berlin, Dresden, Darmstadt, Frankfurt, Singapore, Szeged;
+  % 有节与小节导航条的主题: Copenhagen, Luebeck, Malmos, Warsaw
+
+%  \setbeamercovered{transparent}
+% 如果取消上一行的注解 %, 就会使得被覆盖部分变得透明(依稀可见)
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{CJK}
+
+%\usepackage{beamerthemesplit}
+%\usepackage{beamerthemeshadow,color}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{colortbl}
+
+\graphicspath{{images/}}         %% 图片路径. 本文的图片都放在这个文件夹里了.
+\DeclareGraphicsRule{*}{mps}{*}{} %% 使 pdflatex 可以纳入 metapost 做的图片.
+\renewcommand{\div}{\operatorname{div}}
+\renewcommand{\raggedright}{\leftskip=0pt \rightskip=0pt plus 0cm}
+\raggedright %% 中文对齐
+
+%==============自定义: 逐个 item 高亮(\hilite), 或"高黑"(\hidark)==================%
+\def\hilite<#1>{%
+\temporal<#1>{\color{blue!35}}{\color{magenta}}%
+{\color{blue!75}}}
+\def\hidark<#1>{%
+\temporal<#1>{\color{black!35}}{\color{magenta}}%
+{\color{black}}}
+
+\newcolumntype{H}{>{\columncolor{blue!20}}c!{\vrule}}
+\newcolumntype{H}{>{\columncolor{blue!20}}c}  %% 表格设置
+%==================================参考文献==============================================================
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}  %自定义命令\upcite, 使参考文献引用以上标出现
+\bibliographystyle{plain}
+%=========================================================================================
+
+\def\colorb{\textcolor[rgb]{0.00,0.00,1.00}}
+\def\colorg{\textcolor[rgb]{0.00,1.00,0.00}}
+\def\colorr{\textcolor[rgb]{1.00,0.00,0.00}}
+\newcommand\hdim{\dim_{\mathrm H}}
+\newtheorem{lem}{Lemma}[section]
+\newtheorem{nt}[lem]{Notation}
+\newtheorem{dfn}[lem]{Definition}
+\newtheorem{pro}[lem]{Proposition}
+\newtheorem{thm}[lem]{Theorem}
+\newtheorem{exa}[lem]{Example}
+\newtheorem{cor}[lem]{Corollary}
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\numberwithin{equation}{section}
+\def\N{\mathbb N}
+\def\Q{\mathbb Q}
+\def\R{\mathbb R}
+\def\Z{\mathbb Z}
+\def\vep{\varepsilon}
+%=========================================================================================
+%\setbeamercovered{transparent}
+%
+% The following info should normally be given in you main file:
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                           定制幻灯片---重定义字体、字号命令                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\song}{\CJKfamily{song}}    % 宋体   (Windows自带simsun.ttf)
+\newcommand{\fs}{\CJKfamily{fs}}        % 仿宋体 (Windows自带simfs.ttf)
+\newcommand{\kai}{\CJKfamily{kai}}      % 楷体   (Windows自带simkai.ttf)
+\newcommand{\hei}{\bf}      % 黑体   (Windows自带simhei.ttf)
+\newcommand{\li}{\CJKfamily{li}}        % 隶书   (Windows自带simli.ttf)
+\newcommand{\you}{\CJKfamily{you}}      % 幼圆   (Windows自带simyou.ttf)
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}     % 字号设置
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont} % 字号设置
+\newcommand{\yichu}{\fontsize{32pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\erhao}{\fontsize{21pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}    % 字号设置
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}   % 字号设置
+\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}    % 字号设置
+
+%======================= 标题名称中文化 ============================%
+\newtheorem{dingyi}{\hei 定义~}[section]
+\newtheorem{dingli}{\hei 定理~}[section]
+\newtheorem{yinli}[dingli]{\hei 引理~}
+\newtheorem{tuilun}[dingli]{\hei 推论~}
+\newtheorem{mingti}[dingli]{\hei 命题~}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \usepackage{beamerthemesplit} // Activate for custom appearance
+
+
+\title{\textsc{第4章\ \ \ 线性方程组}}
+\author{郑州大学数学与统计学院 线性代数教研室}
+\date{}
+
+\begin{document}
+\begin{CJK}{UTF8}{gbsn}
+\frame{\titlepage}
+
+
+
+
+\section[4.2]{4.2 $n$维向量空间与欧氏空间}
+
+
+
+
+\section[4.3]{4.3 $P^n$中向量的线性相关性}
+
+
+
+
+
+
+
+
+\section[4.4]{4.4 向量组的秩和矩阵的秩}
+
+
+
+
+\begin{frame}
+ \ \ \ \ 利用秩的概念，可以更精确的描述可逆矩阵和退化矩阵
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 定理~4.12} 方阵$\bm A=(a_{ij})_{nn}$可逆的充要条件是$\bm A$的行向量组(或列向量组)是线性无关的(即$\bm A$的秩$r(\bm A)=n$).
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 定理~4.12'} 方阵$\bm A=(a_{ij})_{nn}$退化的充要条件是$\bm A$的行向量组(或列向量组)是线性相关的(即$\bm A$的秩$r(\bm A)<n$).
+  \pause\vskip 10pt
+ \ \ \ \ {\hei 定义~4.16} 若$n$阶矩阵$\bm A$的秩为$n$，则称$\bm A$为{\hei 满秩矩阵}。
+\end{frame}
+
+\begin{frame}{$k$阶子式}
+ \ \ \ \ {\hei 定义~4.17} 在矩阵$\bm A=(a_{ij})_{mn}$中任取$k$行$i_1,i_2,\cdots,i_k$及$k$列$j_1,j_2,$ $\cdots,j_k$，位于这$k$行$k$列交叉点上的$k^2$个元素按原来顺序排列成的一个$k$行列式，称为$\bm A$的一个{\hei $k$阶子式}，记为$\bm A\left[\begin{matrix}i_1&i_2&\cdots&i_k\\j_1&j_2&\cdots&j_k\end{matrix}\right]$.
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~4} 设
+ $$\bm A=\left[\begin{matrix}1&3&0&1\\2&0&2&1\\3&0&0&-2\end{matrix}\right],$$
+ 求$\bm A\left[\begin{matrix}2&3\\1&2\end{matrix}\right]$和$\bm A\left[\begin{matrix}1&2&3\\2&3&4\end{matrix}\right]$.
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ 可以利用$k$阶子式来描述矩阵的秩
+ \vskip 5pt
+ \ \ \ \ {\hei 定理~4.13} 矩阵$\bm A$的秩$r(\bm A)=r$的充要条件是$\bm A$有非零的$r$阶子式，且$\bm A$的任意$r+1$阶子式都是零。
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 证明} 必要性. 由$r(\bm A)=r$知，$\bm A$中有$r$个行向量线性无关，取出来作成一个$r\times n$矩阵$\bm A_1$，则$r(\bm A_1)=r$. 于是$\bm A_1$有$r$个列向量线性无关，再取出来作成一个$r\times r$ 矩阵$\bm A_2$，则$r(\bm A_2)=r$. 由定理4.12知$|\bm A_2|\neq0$，因此$|\bm A_2|$就是$\bm A$的一个非零的$r$阶子式。
+ \pause\vskip 5pt
+ \ \ \ \ 如果$\bm A$有一个非零的$r+1$阶子式$|\bm A_3|$，则$\bm A_3$的行向量组线性无关，由4.3节例10知，添加分量得到$\bm A$的$r+1$个$n$维行向量仍然线性无关。因此$\bm A$中有$r+1$个线性无关的行向量，这是与$r(\bm A)=r$矛盾。因此$\bm A$中没有非零的$r+1$阶子式。
+
+\end{frame}
+\begin{frame}\small
+ \ \ \ \ 充分性. 设$\bm A$有非零的$r$阶子式，而所有$r+1$阶子式都是零。由行列式展开定理知，$\bm A$的所有大于$r$阶的子式都是0. 不失一般性，设
+ $$|\bm B_1|=\left|\begin{matrix}a_{11}&a_{12}&\cdots&a_{1r}\\a_{21}&a_{22}&\cdots&a_{2r}\\ \vdots&\vdots&&\vdots\\a_{r1}&a_{r2}&\cdots&a_{rr}\end{matrix}\right|\neq0.$$
+ 由定理4.12知$r(\bm B_1)=r$. \pause 令
+ $$\bm B_2=\left[\begin{matrix}a_{11}&a_{12}&\cdots&a_{1r}&\cdots&a_{1n}\\a_{21}&a_{22}&\cdots&a_{2r}&\cdots&a_{2n}\\ \vdots&\vdots&&\vdots&&\vdots\\a_{r1}&a_{r2}&\cdots&a_{rr}&\cdots&a_{rn}\end{matrix}\right|.$$
+ 由4.3节例10知，$\bm B_2$的$r$个行向量也线性无关，故$r(\bm B_2)=r$.
+ \pause\vskip 5pt
+ \ \ \ \ 显然$r(\bm A)\geq r(\bm B_2)$，故$r(\bm A)\geq r$. 如果$r(\bm A)>r$，则由前面已证明的结论知，$\bm A$有大于$r$阶的非零子式，矛盾。故$r(\bm A)=r.\hfill\Box$
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 例~5} 求矩阵$\bm A$的秩：
+ $$\bm A=\left[\begin{matrix}1&3&0&1\\2&0&2&1\\3&0&0&-2\end{matrix}\right].$$
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~6} 求向量组$\bm\alpha_1=(1,0,-1),~\bm\alpha_2=(0,2,1),~\bm\alpha_3=(4,4,-2),$ $\bm\alpha_4=(2,6,1)$的秩。
+\end{frame}
+\begin{frame}
+ \ \ \ \ {\hei 定理~4.14} 齐次线性方程组
+ \begin{equation*}
+ \left\{\begin{array}{rcl}
+ a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n&=&0,\\
+ a_{21}x_1+a_{22}x_2+\cdots+a_{2n}x_n&=&0,\\
+ &\vdots&\\
+ a_{n1}x_1+a_{n2}x_2+\cdots+a_{nn}x_n&=&0,
+ \end{array}\right.
+ \end{equation*}
+ 有非零解(只有零解)的充要条件是系数矩阵$\bm A$是退化的(可逆的)。
+ \end{frame}
+\begin{frame}
+ \ \ \ \ 至此，$n$阶矩阵$\bm A$可逆的等价说法有
+ \vskip 5pt
+ \ \ \ \ (1) 存在$n$阶矩阵$\bm B$，使$\bm{AB}=\bm{BA}=\bm E$;
+ \vskip 5pt
+ \ \ \ \ (2) $|\bm A|\neq0$;
+ \vskip 5pt
+ \ \ \ \ (3) $\bm A$是非退化矩阵;
+ \vskip 5pt
+ \ \ \ \ (4) $\bm A$的行(列)向量组线性无关;
+ \vskip 5pt
+ \ \ \ \ (5) $\bm A$是满秩矩阵;
+ \vskip 5pt
+ \ \ \ \ (6) 齐次线性方程组$\bm{AX}=\bm 0$只有零解;
+ \vskip 5pt
+ \ \ \ \ (7) $\bm A$可以写成一系列初等矩阵的乘积;
+  \vskip 5pt
+ \ \ \ \ (8) $\bm A$的标准形是单位矩阵$\bm E$.
+\end{frame}
+\setcounter{section}{7}
+\section[4.5]{4.5 线性方程组的有解判定定理}
+
+\begin{frame}
+ \ \ \ \ 本节我们利用秩来讨论一般线性方程组
+ \begin{equation*}
+ \left\{\begin{array}{rcl}
+ a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n&=&b_1,\\
+ a_{21}x_1+a_{22}x_2+\cdots+a_{2n}x_n&=&b_2,\\
+ &\vdots&\\
+ a_{m1}x_1+a_{m2}x_2+\cdots+a_{mn}x_n&=&b_m,\\
+ \end{array}\right.
+ \end{equation*}
+ 有解的判定定理及解的个数问题。上面方程组的向量形式为
+ $$x_1\bm\alpha_1+x_2\bm\alpha_2+\cdots +x_n\bm\alpha_n=\bm\beta,$$
+ 其中$\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_n$是系数矩阵的列向量，$\bm\beta$是常数项列向量。
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 引理} 设向量组(I)与向量组(II)的秩相等，且(I)可以由(II)线性表出，则(I)与(II)等价。
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 定理~4.15} 线性方程组$\bm{AX}=\bm B$有解的充要条件是系数矩阵$\bm A$的秩等于增广矩阵$(\bm A,\bm B)$的秩。
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 定理~4.16} 设线性方程组$\bm{AX}=\bm B$的系数矩阵$\bm A$为$m\times n$矩阵，增广矩阵为$(\bm A,\bm B)$，则
+ \vskip 5pt
+ \ \ \ \ (1) 当$r(\bm A)=r(\bm A,\bm B)=n$时，方程组有唯一解；
+ \vskip 5pt
+ \ \ \ \ (2)  当$r(\bm A)=r(\bm A,\bm B)<n$时，方程组有无穷多个解；
+ \vskip 5pt
+ \ \ \ \ (3)  当$r(\bm A)\neq r(\bm A,\bm B)$~(这时必有$r(\bm A,\bm B)=r(\bm A)+1$)时，方程组无解。
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 例~1} 设$\bm A$为$m\times n$矩阵，$\bm B$为$m$维列向量。如果$\bm A$的秩$r(\bm A)=m$，则线性方程组$\bm{AX}=\bm B$必有解。
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~2} 解方程组
+ $$\left\{\begin{array}{l}
+ \lambda x_1+x_2+x_3=1,\\x_1+\lambda x_2+x_3=\lambda,\\x_1+x_2+\lambda x_3=\lambda^2.
+ \end{array}\right.$$
+
+
+\end{frame}
+
+
+\section[4.6]{4.6 线性方程组解的结构}
+
+\setcounter{section}{4}
+\setcounter{equation}{17}
+\begin{frame}{齐次线性方程组解的结构}
+\ \ \ \ 首先讨论齐次线性方程组
+ \begin{equation}\label{e418}
+ \left\{\begin{array}{rcl}
+ a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n&=&0,\\
+ a_{21}x_1+a_{22}x_2+\cdots+a_{2n}x_n&=&0,\\
+ &\vdots&\\
+ a_{m1}x_1+a_{m2}x_2+\cdots+a_{mn}x_n&=&0,\\
+ \end{array}\right.
+ \end{equation}
+ \pause
+ \ \ \ \ {\hei 定义~4.18} 齐次线性方程组解空间的一个基(即一个极大线性无关组)称为它的一个{\hei 基础解系}。如果齐次线性方程组只有零解，则称它没有基础解系。
+ \pause\vskip 10pt
+ \ \ \ \ 易见，一个齐次线性方程组任意两个基础解系都是等价的。
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 定理~4.17} 设$\bm A$是$m\times n$矩阵，则齐次线性方程组$\bm{AX}=\bm0$有基础解系的充要条件是其系数矩阵$\bm A$的秩$r(\bm A)=r<n$. 这时它的任意一个基础解系有$n-r$个解向量。
+\pause\vskip 10pt
+ \ \ \ \ {\hei 证明} 必要性. 当$r(\bm A)=n$时，由定理4.16知$\bm{AX}=\bm0$有唯一解，即只有零解。这时它没有基础解系。所以，$\bm{AX}=\bm0$有基础解系的话，必有$r<n$.
+ \pause\vskip 5pt
+ \ \ \ \ 充分性. 当$r<n$时由定理4.16知$\bm{AX}=\bm0$有无穷多解，因而有基础解系。
+ \end{frame}
+
+\begin{frame}
+ \ \ \ \ 下设$r<n$. 适当调整未知量次序，$\bm{AX}=\bm0$可用初等变换化成阶梯形方程组(去掉$0=0$):
+ \begin{equation}\label{e419}
+ \left\{\begin{array}{rcl}
+ c_{11}x_1+c_{12}x_2+\cdots+c_{1r}x_r+\cdots+c_{1n}x_n&=&0,\\
+ c_{22}x_2+\cdots+c_{2r}x_r+\cdots+c_{2n}x_n&=&0,\\
+ &\vdots&\\
+ c_{rr}x_r+\cdots+c_{rn}x_n&=&0,
+ \end{array}\right.
+ \end{equation}
+ 其中$c_{ii}\neq0,~i=1,2,\cdots,r,~r<n$.
+ \vskip 5pt
+ \ \ \ \  进一步作初等变换，并取$x_{r+1},\cdots,x_n$为自由未知量，令$x_{r+1}=c_1,\cdots,x_n=c_{n-r}$，其中$c_1,\cdots,c_{n-r}$为任意常数，得
+\end{frame}
+
+\begin{frame}\small
+ \begin{equation}\label{e420}
+ \left\{\begin{array}{rcl}
+ x_1&=&d_{1,r+1}c_1+d_{1,r+2}c_2+\cdots+d_{1n}c_{n-r},\\
+ x_2&=&d_{2,r+1}c_1+d_{2,r+2}c_2+\cdots+d_{2n}c_{n-r},\\
+ &\vdots& \\
+ x_r&=&d_{r,r+1}c_1+d_{r,r+2}c_2+\cdots+d_{rn}c_{n-r},\\
+ x_{r+1}&=&c_1, \\
+ &\vdots& \\
+ x_n&=&c_{n-r},
+ \end{array}\right.
+ \end{equation}
+ 把(\ref{e420})写成向量形式，得
+ \begin{equation}\label{e421}
+ \left[\begin{matrix}x_1\\\vdots\\x_r\\x_{r+1}\\x_{r+2}\\\vdots\\x_n\end{matrix}\right]=c_1\left[\begin{matrix}d_{1,r+1}\\\vdots\\d_{r,r+1}\\1\\0\\\vdots\\0\end{matrix}\right]
+ +c_2\left[\begin{matrix}d_{1,r+2}\\\vdots\\d_{r,r+2}\\0\\1\\\vdots\\0\end{matrix}\right]+\cdots+c_{n-r}\left[\begin{matrix}d_{1n}\\\vdots\\d_{rn}\\0\\0\\\vdots\\1\end{matrix}\right]
+ \end{equation}
+\end{frame}
+
+\begin{frame}
+ 由此看出，$\bm{AX}=\bm0$的任意一个解都是向量组
+ $$\bm\eta_1=\left[\begin{matrix}d_{1,r+1}\\\vdots\\d_{r,r+1}\\1\\0\\\vdots\\0\end{matrix}\right],
+ \bm\eta_2=\left[\begin{matrix}d_{1,r+2}\\\vdots\\d_{r,r+2}\\0\\1\\\vdots\\0\end{matrix}\right],\cdots,
+ \bm\eta_{n-r}=\left[\begin{matrix}d_{1n}\\\vdots\\d_{rn}\\0\\0\\\vdots\\1\end{matrix}\right]$$
+ 的线性组合，并且显然它们是线性无关的，因此是解空间的一个基础解系，且有$n-r$个向量。
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 推论~1} 设$\bm X_1,\bm X_2,\cdots,\bm X_{n-r}$是方程组$\bm{AX}=\bm0$的任意一个基础解系，则$\bm{AX}=\bm0$的全部解可以写成$c_1\bm X_1+c_2\bm X_2+\cdots+c_{n-r}\bm X_{n-r}$，其中$c_1,c_2,\cdots,c_{n-r}$为任意常数。
+\pause\vskip 10pt
+\ \ \ \ {\hei 推论~2} 设$\bm A$是$m\times n$矩阵，齐次线性方程组$\bm{AX}=\bm0$的任意$n-r(\bm A)$个线性无关的解向量都构成一个基础解系。
+\pause\vskip 10pt
+\ \ \ \ 设$V$为$P^n$的子空间，称$V$的极大线性无关组$\bm\alpha_1,\bm\alpha_2,\cdots,\bm\alpha_s$为$V$ 的一个基，$s$称为$V$的维数，记dim$V=s$. 因此，齐次线性方程组$\bm{AX}=\bm0$的解空间的维数为$n-r$，其中$r=r(\bm A)$.
+\pause\vskip 10pt
+\ \ \ \ {\hei 例~1} 求
+$$\left\{\begin{array}{r}
+4x_1+2x_2+x_3+2x_4+3x_5=0,\\4x_1+2x_2+x_3+2x_4+x_5=0,\\2x_1+x_2-2x_3+3x_4+2x_5=0,
+\end{array}\right.$$
+的基础解系。
+\end{frame}
+
+\begin{frame}{非齐次线性方程组解的结构}
+\ \ \ \ $\bm{AX}=\bm B$的解与$\bm{AX}=0$的解有密切联系。称齐次线性方程组$\bm{AX}=0$为非齐次线性方程组$\bm{AX}=\bm B$的{\hei 导出线性方程组}，简称{\hei 导出组}。
+
+\pause\vskip 5pt
+\ \ \ \ 不难看出，方程组$\bm{AX}=\bm B$与导出组$\bm{AX}=0$的解有以下关系：
+\vskip 5pt
+\ \ \ \ (1) $\bm{AX}=\bm B$的任意两个解之差是导出组$\bm{AX}=0$的解；
+\vskip 5pt
+\ \ \ \ (2) $\bm{AX}=\bm B$的任意一个解与导出组$\bm{AX}=0$的任意一个解之和仍是$\bm{AX}=\bm B$的解。
+\pause\vskip 5pt
+因此有
+\vskip 1pt
+\ \ \ \ {\hei 定理~4.18} 设$\bm X_0$为线性方程组$\bm{AX}=\bm B$的一个特解，$\bm X_1,\bm X_2,$ $\cdots,\bm X_{n-r}$ 是导出组$\bm{AX}=0$的任意一个基础解系，则$\bm{AX}=\bm B$ 的解集合为
+$$\big\{\bm X_0+c_1\bm X_1+c_2\bm X_2+\cdots+c_{n-r}\bm X_{n-r}|c_1,c_2,\cdots,c_{n-r}\mbox{为任意常数}\big\}.$$
+
+\end{frame}
+\begin{frame}
+\ \ \ \ {\hei 例~2} 解方程组
+$$\left\{\begin{array}{rcl}
+x_1+2x_2-x_3+2x_4&=&1,\\2x_1+4x_2+x_3+x_4&=&5,\\-x_1-2x_2-2x_3+x_4&=&-4.
+\end{array}\right.$$
+\pause\vskip 10pt
+\ \ \ \ {\hei 例~3} 解方程组
+$$\left\{\begin{array}{rcl}
+x_1-2x_2+2x_3+3x_4&=&-5,\\2x_1-x_2+5x_3+6x_4&=&-5,\\2x_1-6x_2+4x_3+7x_4&=&-14,\\4x_1-5x_2+9x_3+12x_4&=&-15.
+\end{array}\right.$$
+\end{frame}
+\begin{frame}
+\ \ \ \ {\hei 例~4} 设$\bm{AX}=\bm B$为非齐次线性方程组，$r(\bm A)=2$, $\bm X$为4维列向量。已知$\bm\alpha_1=(1,0,0,0)',~\bm\alpha_2=(1,1,1,1)',~\bm\alpha_3=(1,2,3,4)'$都是$\bm{AX}=\bm B$的解，求该线性方程组的通解。
+\end{frame}
+
+
+%=====================================================frame8=========================================
+
+
+\begin{frame}
+\begin{center}
+{\textcolor[rgb]{0.50,0.00,1.00}{\textbf{\xiaoerhao{Thanks for your attention!}}}}\bigskip
+\end{center}
+\end{frame}
+\end{CJK}
+\end{document}
+
+

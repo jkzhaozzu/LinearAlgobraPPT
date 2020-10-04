@@ -1,0 +1,806 @@
+\documentclass[compress,mathserif,cjk]{beamer}
+\usepackage{mathrsfs}
+\usepackage{color}
+\usepackage{CJK}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{extarrows}
+\usepackage{ulem}
+\usepackage{latexsym}
+\usepackage{pmat}
+
+% Copyright 2003 by Till Tantau <tantau@cs.tu-berlin.de>.
+%
+% This program can be redistributed and/or modified under the terms
+% of the LaTeX Project Public License Distributed from CTAN
+% archives in directory macros/latex/base/lppl.txt.
+
+%
+% The purpose of this example is to show how \part can be used to
+% organize a lecture.
+%
+\usetheme{Warsaw}
+  % 可供选择的主题参见 beameruserguide.pdf, 第 134 页起
+  % 无导航条的主题: Bergen, Boadilla, Madrid, Pittsburgh, Rochester;
+  % 有树形导航条的主题: Antibes, JuanLesPins, Montpellier;
+  % 有目录竖条的主题: Berkeley, PaloAlto, Goettingen, Marburg, Hannover;
+  % 有圆点导航条的主题: Berlin, Dresden, Darmstadt, Frankfurt, Singapore, Szeged;
+  % 有节与小节导航条的主题: Copenhagen, Luebeck, Malmos, Warsaw
+
+%  \setbeamercovered{transparent}
+% 如果取消上一行的注解 %, 就会使得被覆盖部分变得透明(依稀可见)
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{CJK}
+
+%\usepackage{beamerthemesplit}
+%\usepackage{beamerthemeshadow,color}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+\usepackage{colortbl}
+
+\graphicspath{{images/}}         %% 图片路径. 本文的图片都放在这个文件夹里了.
+\DeclareGraphicsRule{*}{mps}{*}{} %% 使 pdflatex 可以纳入 metapost 做的图片.
+\renewcommand{\div}{\operatorname{div}}
+\renewcommand{\raggedright}{\leftskip=0pt \rightskip=0pt plus 0cm}
+\raggedright %% 中文对齐
+
+%==============自定义: 逐个 item 高亮(\hilite), 或"高黑"(\hidark)==================%
+\def\hilite<#1>{%
+\temporal<#1>{\color{blue!35}}{\color{magenta}}%
+{\color{blue!75}}}
+\def\hidark<#1>{%
+\temporal<#1>{\color{black!35}}{\color{magenta}}%
+{\color{black}}}
+
+\newcolumntype{H}{>{\columncolor{blue!20}}c!{\vrule}}
+\newcolumntype{H}{>{\columncolor{blue!20}}c}  %% 表格设置
+%==================================参考文献==============================================================
+\newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}  %自定义命令\upcite, 使参考文献引用以上标出现
+\bibliographystyle{plain}
+%=========================================================================================
+
+\def\colorb{\textcolor[rgb]{0.00,0.00,1.00}}
+\def\colorg{\textcolor[rgb]{0.00,1.00,0.00}}
+\def\colorr{\textcolor[rgb]{1.00,0.00,0.00}}
+\newcommand\hdim{\dim_{\mathrm H}}
+\newtheorem{lem}{Lemma}[section]
+\newtheorem{nt}[lem]{Notation}
+\newtheorem{dfn}[lem]{Definition}
+\newtheorem{pro}[lem]{Proposition}
+\newtheorem{thm}[lem]{Theorem}
+\newtheorem{exa}[lem]{Example}
+\newtheorem{cor}[lem]{Corollary}
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+\numberwithin{equation}{section}
+\def\N{\mathbb N}
+\def\Q{\mathbb Q}
+\def\R{\mathbb R}
+\def\Z{\mathbb Z}
+\def\vep{\varepsilon}
+%=========================================================================================
+%\setbeamercovered{transparent}
+%
+% The following info should normally be given in you main file:
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                           定制幻灯片---重定义字体、字号命令                           %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\song}{\CJKfamily{song}}    % 宋体   (Windows自带simsun.ttf)
+\newcommand{\fs}{\CJKfamily{fs}}        % 仿宋体 (Windows自带simfs.ttf)
+\newcommand{\kai}{\CJKfamily{kai}}      % 楷体   (Windows自带simkai.ttf)
+\newcommand{\hei}{\bf}      % 黑体   (Windows自带simhei.ttf)
+\newcommand{\li}{\CJKfamily{li}}        % 隶书   (Windows自带simli.ttf)
+\newcommand{\you}{\CJKfamily{you}}      % 幼圆   (Windows自带simyou.ttf)
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}     % 字号设置
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont} % 字号设置
+\newcommand{\yichu}{\fontsize{32pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\erhao}{\fontsize{21pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}    % 字号设置
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}   % 字号设置
+\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}    % 字号设置
+
+%======================= 标题名称中文化 ============================%
+\newtheorem{dingyi}{\hei 定义~}[section]
+\newtheorem{dingli}{\hei 定理~}[section]
+\newtheorem{yinli}[dingli]{\hei 引理~}
+\newtheorem{tuilun}[dingli]{\hei 推论~}
+\newtheorem{mingti}[dingli]{\hei 命题~}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \usepackage{beamerthemesplit} // Activate for custom appearance
+
+
+\title{\textsc{第3章\ \ \ 矩阵}}
+\author{郑州大学数学与统计学院 线性代数教研室}
+\date{}
+
+\begin{document}
+\begin{CJK}{UTF8}{gbsn}
+\frame{\titlepage}
+
+\begin{frame}\frametitle{目录}
+ \tableofcontents
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[3.1]{3.1 矩阵的概念}
+\begin{frame}
+ \ \ \ \ {\hei 例~1} 解二元一次方程组
+ $$\left\{\begin{array}{r}
+ 2x+y=5,\\
+ x-4y=7.
+ \end{array}\right.$$
+ \pause\ \ \ \ {\hei 解}\hspace{2em}
+ \small
+ $\left\{\begin{array}{r} 2x+y=5,\\ x-4y=7.\end{array}\right.$ \hspace{6em}$\left[\begin{matrix}2&1&5\\1&-4&7\end{matrix}\right]$
+ \vskip 2pt\hspace{8em}$\downarrow\hspace{12em}\downarrow$
+ \vskip 2pt\hspace{4.5em}
+ $\left\{\begin{array}{r}x-4y=7,\\ 2x+y=5.\end{array}\right.$ \hspace{6em}$\left[\begin{matrix}1&-4&7\\ 2&1&5\end{matrix}\right]$
+ \vskip 2pt\hspace{8em}$\downarrow\hspace{12em}\downarrow$
+ \vskip 2pt\hspace{4.4em}
+ $\left\{\begin{array}{r}x-4y=7,\ \ \ \\ 9y=-9.\end{array}\right.$ \hspace{5.3em}$\left[\begin{matrix}1&-4&7\\ 0&9&-9\end{matrix}\right]$
+ \vskip 2pt\hspace{8em}$\downarrow\hspace{12em}\downarrow$
+ \vskip 2pt\hspace{4.4em}
+ $\left\{\begin{array}{r}x-4y=7,\ \ \ \\ y=-1.\end{array}\right.$ \hspace{5.3em}$\left[\begin{matrix}1&-4&7\\ 0&1&-1\end{matrix}\right]$
+ \vskip 2pt\hspace{8em}$\downarrow\hspace{12em}\downarrow$
+ \vskip 2pt\hspace{4.4em}
+ $\left\{\begin{array}{r}x=3,\ \ \ \\ y=-1.\end{array}\right.$ \hspace{7.5em}$\left[\begin{matrix}1&0&3\\ 0&1&-1\end{matrix}\right]$
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 例~2} 设一组变量$x_1,x_2,x_3$和另一组变量$y_1,y_2,y_3$具有下面的线性关系
+ $$\left\{\begin{array}{r}
+ y_1=a_{11}x_1+a_{12}x_2+a_{13}x_3,\\
+ y_2=a_{21}x_1+a_{22}x_2+a_{23}x_3,\\
+ y_3=a_{31}x_1+a_{32}x_2+a_{33}x_3,
+ \end{array}\right.$$
+ 其中$a_{ij}~(i,j=1,2,3)$都是实数。\pause 则上述两组变量之间的关系可以用系数作成的数表
+ $$\left[\begin{matrix}a_{11}&a_{12}&a_{13}\\a_{21}&a_{22}&a_{23}\\a_{31}&a_{32}&a_{33}\end{matrix}\right]$$
+ 来表示。
+\end{frame}
+
+\begin{frame}{矩阵的定义}
+ \ \ \ \ {\hei 定义~3.1} 设$P$为一个数域，由$P$中的$m\times n$个数$a_{ij}~(i=1,2,\cdots,m;~j=1,2,\cdots,n)$按一定次序排列成的{\hei 数表}
+ $$\left(\begin{matrix}a_{11}&a_{12}&\cdots&a_{1n}\\a_{21}&a_{22}&\cdots&a_{2n}\\ \vdots&\vdots&&\vdots\\a_{m1}&a_{m2}&\cdots&a_{mn}\end{matrix}\right)\hspace{1em}\mbox{或}\hspace{1em}
+ \left[\begin{matrix}a_{11}&a_{12}&\cdots&a_{1n}\\a_{21}&a_{22}&\cdots&a_{2n}\\ \vdots&\vdots&&\vdots\\a_{m1}&a_{m2}&\cdots&a_{mn}\end{matrix}\right]$$
+ 称为数域$P$上的一个$m\times n${\hei 矩阵}，记作$\bm A$或$(a_{ij})_{m\times n}$或$(a_{ij})$，其中每个$a_{ij}$都称为$\bm A$的一个{\hei 元素}。
+ \pause\vskip 5pt
+ \ \ \ \ \ 习惯上，我们把矩阵的第$i$行第$j$列元素叫做$\bm A$的$(i,j)$-{\hei 元素}。当$P$为实(或复)数域时，$\bm A$称为{\hei 实}(或{\hei 复}){\hei 矩阵}。
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 定义~3.2} 设$\bm A,\bm B$为两个矩阵，如果它们的行数、列数分别相等，则称$\bm A,\bm B$为{\hei 同型矩阵}。又若$\bm A,\bm B$为同型矩阵，$\bm A=(a_{ij})_{m\times n},\bm B=(b_{ij})_{m\times n}$，如果$a_{ij}=b_{ij}~(i=1,2,\cdots,m;~j=1,2,\cdots,n)$，则称$\bm A$与$\bm B${\hei 相等}，记为$\bm A=\bm B$。
+ \pause\vskip 10pt
+ \ \ \ \ 矩阵与行列式有本质的区别。一般地，行列式是按特定的运算方法得到的一个数值，而矩阵是一个矩形的数表。
+\end{frame}
+
+\begin{frame}{几种特殊的矩阵}
+ \ \ \ \ {\hei 零矩阵} $$\bm O=\left[\begin{matrix}0&0&\cdots&0\\0&0&\cdots&0\\ \vdots&\vdots&&\vdots\\0&0&\cdots&0\end{matrix}\right].$$
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 方阵} 若矩阵$\bm A$的行数和列数相等，则称$\bm A$是一个{\hei 方阵}，$n$行$n$列的矩阵称为$n$阶方阵，又称为$n$阶矩阵。在方阵$\bm A$中，行数、列数相等的元素$a_{ii}~(i=1,2,\cdots,n)$位于一条对角线上，该对角线称为$\bm A$的{\hei 主对角线}。
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 单位矩阵} $$\bm E=\left[\begin{matrix}1&0&\cdots&0\\0&1&\cdots&0\\ \vdots&\vdots&&\vdots\\0&0&\cdots&1\end{matrix}\right].$$
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 数量矩阵} $$a\bm E=\left[\begin{matrix}a&0&\cdots&0\\0&a&\cdots&0\\ \vdots&\vdots&&\vdots\\0&0&\cdots&a\end{matrix}\right],$$
+ 其中$a$是数量，$\bm E$是单位矩阵。
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 对角矩阵} $$\bm A=\left[\begin{matrix}a_1&0&\cdots&0\\0&a_2&\cdots&0\\ \vdots&\vdots&&\vdots\\0&0&\cdots&a_n\end{matrix}\right],$$
+ 有时也记为diag($a_1,a_2,\cdots,a_n$).
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 上、下三角形矩阵} $$\bm A=\left[\begin{matrix}a_{11}&a_{12}&\cdots&a_{1n}\\0&a_{22}&\cdots&a_{2n}\\ \vdots&\vdots&&\vdots\\0&0&\cdots&a_{nn}\end{matrix}\right],~~~
+ \bm B=\left[\begin{matrix}a_{11}&0&\cdots&0\\a_{21}&a_{22}&\cdots&0\\ \vdots&\vdots&&\vdots\\a_{n1}&a_{n2}&\cdots&a_{nn}\end{matrix}\right].$$
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 负矩阵} 设矩阵$\bm A=(a_{ij})$，则$(-a_{ij})$为$\bm A$的{\hei 负矩阵}，记作$-\bm A$.
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 阶梯形矩阵} 一个矩阵$\bm A=(a_{ij})_{m\times n}$称为{\hei 阶梯形矩阵}，如果它满足：每一行第一个元素到第一个非零元素的下方(如果存在的话)全为0，且全零行位于非零行的下方。例如
+ $$\left[\begin{matrix}2&3&-1&0\\0&1&2&-1\\0&0&0&13\end{matrix}\right],~~~\left[\begin{matrix}1&-2&3&-1\\0&0&2&5\\0&0&0&0\end{matrix}\right]$$
+ 都是阶梯形矩阵，\pause 而
+ $$\left[\begin{matrix}2&3&-1&0\\0&1&2&-1\\0&-1&0&3\end{matrix}\right],~~~\left[\begin{matrix}1&-2&3&-1\\0&0&0&0\\0&0&2&5\end{matrix}\right]$$
+ 都不是阶梯形矩阵。
+\end{frame}
+
+\section[3.2]{3.2 矩阵的运算}
+
+\begin{frame}{一、矩阵的线性运算}
+ \ \ \ \ {\hei 定义~3.3} 设矩阵$\bm A=(a_{ij}),\bm B=(b_{ij})$都是$m\times n$矩阵，则称$\bm C=(a_{ij}+b_{ij})$，即由$\bm A$与$\bm B$的对应元素之和组成的矩阵，为$\bm A$与$\bm B$ 的{\hei 和}，记作$\bm C=\bm A+\bm B$. \pause 又称$\bm A+(-\bm B)$为$\bm A$与$\bm B$的{\hei 差}，记为$\bm A-\bm B$，即$\bm A-\bm B=\bm A+(-\bm B)$.
+ \vskip 5pt
+ \ \ \ \ {\hei 注} 只有同型矩阵才能进行加、减法运算。
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 定义~3.4} 设$k$是一个数，矩阵$\bm A=(a_{ij})$，则矩阵$(ka_{ij})$称为数$k$与矩阵$\bm A$的{\hei 乘积}，记作$k\bm A$.
+
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ 矩阵加法与数量乘法的运算规律：设$\bm A,\bm B,\bm C$都是$m\times n$矩阵，$l,k$是数，则
+ \vskip 5pt
+ \ \ \ \ 1. $\bm A+\bm B=\bm B+\bm A$;
+ \vskip 5pt
+ \ \ \ \ 2. $(\bm A+\bm B)+\bm C=\bm A+(\bm B+\bm C)$;
+ \vskip 5pt
+ \ \ \ \ 3. $\bm A+\bm O=\bm A$;
+ \vskip 5pt
+ \ \ \ \ 4. $\bm A+(-\bm A)=\bm O$;
+ \vskip 5pt
+ \ \ \ \ 5. $1\bm A=\bm A$;
+ \vskip 5pt
+ \ \ \ \ 6. $(kl)\bm A=k(l\bm A)=l(k\bm A)$;
+ \vskip 5pt
+ \ \ \ \ 7. $(k+l)\bm A=k\bm A+l\bm A$;
+ \vskip 5pt
+ \ \ \ \ 8. $k(\bm A+\bm B)=k\bm A+k\bm B$.
+
+\end{frame}
+
+\begin{frame}{二、矩阵的乘法}
+ \ \ \ \ {\hei 例~3} 设变量$x_1,x_2,y_1,y_2,z_1,z_2,z_3$满足
+ $$\left\{\begin{array}{l}z_1=a_{11}y_1+a_{12}y_2,\\z_2=a_{21}y_1+a_{22}y_2,\\z_3=a_{31}y_1+a_{32}y_2,\end{array}\right. ~~~\mbox{和}~~~
+ \left\{\begin{array}{l}y_1=b_{11}x_1+b_{12}x_2,\\y_2=b_{21}x_1+b_{22}x_2,\end{array}\right.$$
+ 其中$a_{ij},b_{kl}\in$数域$P$. 则不难得到
+ $$\left\{\begin{array}{l}z_1=(a_{11}b_{11}+a_{12}b_{21})x_1+(a_{11}b_{12}+a_{12}b_{22})x_2,\\z_2=(a_{21}b_{11}+a_{22}b_{21})x_1+(a_{21}b_{12}+a_{22}b_{22})x_2,\\
+ z_3=(a_{31}b_{11}+a_{32}b_{21})x_1+(a_{31}b_{12}+a_{32}b_{22})x_2,\end{array}\right.$$
+ \pause 这对应三个矩阵
+\footnotesize
+ $$\bm A=\left[\begin{matrix}a_{11}&a_{12}\\a_{21}&a_{22}\\a_{31}&a_{32}\end{matrix}\right],~\bm B=\left[\begin{matrix}b_{11}&b_{12}\\b_{21}&b_{22}\end{matrix}\right],~
+ \bm C=\left[\begin{matrix}a_{11}b_{11}+a_{12}b_{21}&a_{11}b_{12}+a_{12}b_{22}\\a_{21}b_{11}+a_{22}b_{21}&a_{21}b_{12}+a_{22}b_{22}\\
+ a_{31}b_{11}+a_{32}b_{21}&a_{31}b_{12}+a_{32}b_{22}\end{matrix}\right]$$
+
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 定义~3.5} 设$\bm A=(a_{ik})_{m\times s},\bm B=(b_{kj})_{s\times n}$，则称矩阵$\bm C=(c_{ij})_{m\times n}$是$\bm A$ 和$\bm B$的{\hei 乘积}，其中
+ \begin{eqnarray*}
+ c_{ij}&=&a_{i1}b_{1j}+a_{i2}b_{2j}+\cdots+a_{is}b_{sj}=\sum_{k=1}^sa_{ik}b_{kj},\\
+ &&\hspace{6em}i=1,2,\cdots,m,~j=1,2,\cdots,n,
+ \end{eqnarray*}
+ 记作$\bm C=\bm A\bm B$. 即乘积$\bm A\bm B$中的$(i,j)$-元素是$\bm A$的第$i$行元素与$\bm B$的第$j$列对应元素乘积之和。
+ \pause\vskip 5pt
+ \ \ \ \ 从定义可以看出要使乘积$\bm A\bm B$有意义，$\bm A$的列数必须等于$\bm B$的行数。
+ \pause\vskip 10pt
+ \ \ \ \  再回头看例3，有
+ $$\left[\begin{matrix}z_1\\z_2\\z_3\end{matrix}\right]=\bm A\left[\begin{matrix}y_1\\y_2\end{matrix}\right],~~
+ \left[\begin{matrix}y_1\\y_2\end{matrix}\right]=\bm B\left[\begin{matrix}x_1\\x_2\end{matrix}\right],~~
+ \left[\begin{matrix}z_1\\z_2\\z_3\end{matrix}\right]=\bm C\left[\begin{matrix}x_1\\x_2\end{matrix}\right]=\bm A\bm B\left[\begin{matrix}x_1\\x_2\end{matrix}\right]. $$
+\end{frame}
+
+\begin{frame}{线性方程组的矩阵形式}
+ \ \ \ \ {\hei 例~4} 给定一个含有$n$个变量$m$个方程的线性方程组
+ \begin{equation*}
+ \left\{\begin{array}{c}
+ a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n=b_1,\\
+ a_{21}x_1+a_{22}x_2+\cdots+a_{2n}x_n=b_2,\\
+ \vdots\\
+ a_{m1}x_1+a_{m2}x_2+\cdots+a_{mn}x_n=b_m,\\
+ \end{array}\right.
+ \end{equation*}
+ \pause 令$\bm A=(a_{ij})_{m\times n},~\bm X=\left[\begin{matrix}x_1\\x_2\\ \vdots\\x_n\end{matrix}\right],~\bm B=\left[\begin{matrix}b_1\\b_2\\ \vdots\\b_m\end{matrix}\right]$，则上述方程组可写成
+ $$\bm A\bm X=\bm B.$$
+
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 例~5} 设$\bm A=[1~~2~~3],~\bm B=\left[\begin{matrix}1\\2\\3\end{matrix}\right]$，求$\bm A\bm B,~\bm B\bm A.$
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~6} 设$\bm A=\left[\begin{matrix}1&0\\1&0\end{matrix}\right],~\bm B=\left[\begin{matrix}0&0\\1&1\end{matrix}\right],$ 求$\bm A\bm B,~\bm B\bm A.$
+
+\end{frame}
+
+\begin{frame}
+ 矩阵乘法的运算规律：
+ \vskip 5pt
+ \ \ \ \ 1. 结合律\ \ $(\bm{AB})\bm C=\bm A(\bm{BC})$;
+ \vskip 5pt
+ \ \ \ \ 2. 左分配律\ \ $(\bm A+\bm B)\bm C=\bm{AC}+\bm{BC}$;
+ \vskip 5pt
+ \ \ \ \ 3. 右分配律\ \ $\bm A(\bm B+\bm C)=\bm{AB}+\bm{AC}$;
+ \vskip 5pt
+ \ \ \ \ 4. $k(\bm{AB})=(k\bm A)\bm B=\bm A(k\bm B)$.
+ \vskip 5pt
+ 其中$\bm A,\bm B,\bm C$都是矩阵，$k$是数量。
+  \pause\vskip 10pt
+数量矩阵具有下列性质：设$k,l$为数域$P$中的数，$\bm A$为$s\times n$矩阵，则
+ \vskip 5pt
+ \ \ \ \ 1. $k\bm E+l\bm E=(k+l)\bm E$;
+ \vskip 5pt
+ \ \ \ \ 2. $(k\bm E)(l\bm E)=(kl)\bm E$;
+ \vskip 5pt
+ \ \ \ \ 3. $(k\bm E_s)\bm A=\bm A(k\bm E_n)=k\bm A$.
+
+\end{frame}
+
+\begin{frame}{三、矩阵的转置}
+ \ \ \ \ {\hei 定义~3.6} 把矩阵$\bm A_{m\times n}$的行和列互换，得到一个$n\times m$矩阵，称为$\bm A$的{\hei 转置矩阵}，记作$\bm A'$或$\bm A^\top$.
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~7} 设$\bm A=\left[\begin{matrix}1&2&3\\-1&0&1\\2&1&0\end{matrix}\right],~\bm B=\left[\begin{matrix}1\\2\\3\end{matrix}\right],$ 求$\bm A',~\bm B',~(\bm{AB})',~\bm B'\bm A'.$
+ \pause\vskip 10pt
+ 矩阵的转置有以下运算规律：
+ \vskip 5pt
+ \ \ \ \ 1. $(\bm A')'=\bm A$;
+ \vskip 5pt
+ \ \ \ \ 2. $(\bm A+\bm B)'=\bm A'+\bm B'$;
+ \vskip 5pt
+ \ \ \ \ 3. $(k\bm A)'=k\bm A'$;
+ \vskip 5pt
+ \ \ \ \ 4. $(\bm{AB})'=\bm B'\bm A'$.
+ \vskip 5pt
+ 其中$\bm A,\bm B$是矩阵，$k$是数量。
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 例~8} 证明$(\bm{AB})'=\bm B'\bm A'$.
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 证明} 设$\bm A=(a_{ij})_{m\times l},~\bm B=(b_{ij})_{l\times n},$ 则$\bm A'=(a_{ji})_{l\times m},~\bm B'=(b_{ji})_{n\times l}.$ 易见$(\bm{AB})',\bm B'\bm A'$都是$n\times m$矩阵。
+ \pause\vskip 5pt
+ \ \ \ \ 再看$(\bm{AB})'$和$\bm B'\bm A'$的对应元素。$(\bm{AB})'$的$(i,j)$-元素是$\bm{AB}$的$(j,i)$-元素，即
+ $$\sum_{k=1}^la_{jk}b_{ki}=a_{j1}b_{1i}+a_{j2}b_{2i}+\cdots+a_{jl}b_{li}.$$
+ \pause\ \ \ \ $\bm B'\bm A'$的$(i,j)$-元素是$\bm B'$的第$i$行与$\bm A'$的第$j$列对应元素乘积之和，也就是$\bm B$的第$i$列与$\bm A$的第$j$行对应元素乘积之和，即
+ $$\sum_{k=1}^lb_{ki}a_{jk}=b_{1i}a_{j1}+b_{2i}a_{j2}+\cdots+b_{li}a_{jl}.$$
+ 可见$(\bm{AB})'$和$\bm B'\bm A'$的对应元素相等，故$(\bm{AB})'=\bm B'\bm A'.\hfill\Box$
+\end{frame}
+
+\begin{frame}{对称矩阵与反对称矩阵}
+ \ \ \ \ 假设$\bm A$为方阵，如果$\bm A'=\bm A,$ 则称$\bm A$是{\hei 对称矩阵}。如果$\bm A'=-\bm A,$ 则称$\bm A$为{\hei 反对称矩阵}。
+ \pause\vskip 10pt
+ \ \ \ \ 显然有以下结论：
+ \vskip 5pt
+ \ \ \ \ 1. $\bm A'=\bm A~\Longleftrightarrow~a_{ij}=a_{ji}$;
+ \vskip 5pt
+ \ \ \ \ 2. $\bm A'=-\bm A~\Longleftrightarrow~a_{ij}=-a_{ji}$;
+ \vskip 5pt
+ \ \ \ \ 3. 特别地，反对称矩阵主对角线元素为0;
+ \vskip 5pt
+ \ \ \ \ 4. 对任意矩阵$\bm A,~~\bm A'\bm A$和$\bm A\bm A'$是两个对称矩阵。
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~9} 设$\bm A,\bm B$为$n$阶对称矩阵，证明$\bm A\bm B$为对称矩阵的充要条件是$\bm A\bm B=\bm B\bm A$.
+\end{frame}
+
+\begin{frame}{四、方阵的幂}
+ 设$k$是正整数，$\bm A$为方阵，则称$\bm A^k=\underbrace{\bm A\bm A\cdots\bm A}_{k\mbox{\scriptsize 个}}$为$\bm A$的$k$次{\hei 方幂}。\\
+ \pause
+ \ \ \ \ 方幂有以下运算规律：
+ \vskip 5pt
+ \ \ \ \ 1. $\bm A^l\bm A^k=\bm A^{l+k}$;
+ \vskip 5pt
+ \ \ \ \ 2. $(\bm A^l)^k=\bm A^{lk}$.
+ \pause\vskip 10pt
+ \ \ \ \ 规定$\bm A^0=\bm E$. 设多项式$f(x)=\sum_{i=0}^na_ix^i,$ 则规定方阵$\bm A$的多项式为
+ $$f(\bm A)=\sum_{i=0}^na_i\bm A^i.$$
+ \pause 显然，对方阵$\bm A$的任意两个多项式$f(\bm A),g(\bm A),$ 都有$f(\bm A)g(\bm A)=g(\bm A)f(\bm A).$
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~10} 设$\bm A=[1~2~3],$ 求$\bm A\bm A',~\bm A'\bm A$和$(\bm A'\bm A)^n$, 其中$n\geq2$为自然数。
+\end{frame}
+
+\begin{frame}{五、矩阵的分块}
+\small
+ \ \ \ \ 以矩阵块为元素的矩阵称为{\hei 分块矩阵}。
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~11} 设$\bm A=\left[\begin{matrix}a_{11}&a_{12}&a_{13}&a_{14}\\a_{21}&a_{22}&a_{23}&a_{24}\\a_{31}&a_{32}&a_{33}&a_{34}\end{matrix}\right]$，
+ 令$\bm A_1= \left[\begin{matrix}a_{11}\\a_{21}\\a_{31}\end{matrix}\right],~\bm A_2= \left[\begin{matrix}a_{12}\\a_{22}\\a_{32}\end{matrix}\right],~\bm A_3= \left[\begin{matrix}a_{13}\\a_{23}\\a_{33}\end{matrix}\right],~\bm A_4= \left[\begin{matrix}a_{14}\\a_{24}\\a_{34}\end{matrix}\right]$，则$\bm A=[\bm A_1~\bm A_2~\bm A_3~\bm A_4].$
+ \pause\vskip 2pt
+ $\bm A$还可以按行分为$\bm A=\left[\begin{matrix}\bm B_1\\\bm B_2\\\bm B_3\end{matrix}\right]$，其中$\bm B_1=[a_{11}~a_{12}~a_{13}~a_{14}],~\bm B_2=[a_{21}~a_{22}~a_{23}~a_{24}],~\bm B_3=[a_{31}~a_{32}~a_{33}~a_{34}].$
+ \pause\vskip 5pt
+ \ \ \ \ 又若令$\bm A_{11}=\left[\begin{matrix}a_{11}&a_{12}&a_{13}\\a_{21}&a_{22}&a_{23}\end{matrix}\right],~\bm A_{12}=\left[\begin{matrix}a_{14}\\a_{24}\end{matrix}\right],~\bm A_{21}=[a_{31}~a_{32}~a_{33}]$, $\bm A_{22}=[a_{34}],$ 则
+ $$\bm A=\left[\begin{matrix}\bm A_{11}&\bm A_{12}\\\bm A_{21}&\bm A_{22}\end{matrix}\right].$$
+
+\end{frame}
+
+\begin{frame}
+\ \ \ \ 设$\bm A=(a_{ij})_{m\times n},\bm B=(b_{ij})_{m\times n}$，则在作加减法运算时要求$\bm A$的行与列的分法和$\bm B$的行与列的分法完全一致。
+\pause\vskip 5pt
+\ \ \ \ {\hei 例~12} 设
+$$\bm A=\begin{pmat}[{.|}]
+-1 & 0 & 1 & 3 \cr
+0 & 1 & 2 & 4 \cr\-
+0 & 0 & -1 & 0 \cr
+0 & 0 & 0 & 1 \cr
+\end{pmat}=\left[\begin{matrix}\bm A_{11}&\bm A_{12}\\\bm O&\bm A_{22}\end{matrix}\right],$$
+$$\bm B=\begin{pmat}[{.|}]
+1 & 0 & 0 & 0 \cr
+0 & -1 & 0 & 0 \cr\-
+3 & 2 & 1 & 0 \cr
+0 & -1 & 0 & -1 \cr
+\end{pmat}=\left[\begin{matrix}\bm B_{11}&\bm O\\\bm B_{21}&\bm B_{22}\end{matrix}\right],$$
+则
+$$\bm A+\bm B=\left[\begin{matrix}\bm A_{11}+\bm B_{11}&\bm A_{12}\\\bm B_{21}&\bm A_{22}+\bm B_{22}\end{matrix}\right]
+=\left[\begin{matrix}\bm O&\bm A_{12}\\\bm B_{21}&\bm O\end{matrix}\right]
+=\begin{pmat}[{.|}]
+0 & 0 & 1 & 3 \cr
+0 & 0 & 2 & 4 \cr\-
+3 & 2 & 0 & 0 \cr
+0 & -1 & 0 & 0 \cr
+\end{pmat}.$$
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 例~13} 设
+$$\bm A=\begin{pmat}[{.|}]
+0 & 0 & 1 & 3 \cr
+0 & 0 & 2 & 4 \cr\-
+3 & 2 & 0 & 0 \cr
+\end{pmat}=\left[\begin{matrix}\bm O&\bm A_{12}\\\bm A_{21}&\bm O\end{matrix}\right],$$
+则
+$$5\bm A=\left[\begin{matrix}\bm O&5\bm A_{12}\\5\bm A_{21}&\bm O\end{matrix}\right]=
+\begin{pmat}[{.|}]
+0 & 0 & 5 & 15 \cr
+0 & 0 & 10 & 20 \cr\-
+15 & 10 & 0 & 0 \cr
+\end{pmat}$$
+\end{frame}
+
+
+\begin{frame}
+\ \ \ \ 设$\bm A=(a_{ij})_{m\times l},\bm B=(b_{ij})_{l\times n},$ 则在作分块矩阵乘法运算$\bm{AB}$时$\bm A$的列分法还需和$\bm B$的行分法一致，即$\bm A$中每个子块的列数与$\bm B$中对应相乘的子块的行数相同。
+\pause\vskip 5pt
+\ \ \ \ {\hei 例~14} 设
+$$\bm A=\begin{pmat}[{|}]
+0 & 0 & 0 & 2 \cr
+0 & 2 & -1 & 1 \cr
+0 & 3 & 1 & 0 \cr\-
+2 & 0 & 0 & 0 \cr
+\end{pmat}=\left[\begin{matrix}\bm O&\bm A_{12}\\\bm A_{21}&\bm O\end{matrix}\right],$$
+$$\bm B=\begin{pmat}[{.|}]
+4 & 5 & 7 \cr\-
+2 & -1 & 0 \cr
+3 & 6 & 0 \cr
+0 & -1 & 0 \cr
+\end{pmat}=\left[\begin{matrix}\bm B_{11}&\bm B_{12}\\\bm B_{21}&\bm O\end{matrix}\right],$$
+则\small
+$$\bm{AB}=\left[\begin{matrix}\bm O&\bm A_{12}\\\bm A_{21}&\bm O\end{matrix}\right]\left[\begin{matrix}\bm B_{11}&\bm B_{12}\\\bm B_{21}&\bm O\end{matrix}\right]
+=\left[\begin{matrix}\bm A_{12}\bm B_{21}&\bm O\\\bm A_{21}\bm B_{11}&\bm A_{21}\bm B_{12}\end{matrix}\right]
+=\begin{pmat}[{.|}]
+0 & -2 & 0 \cr
+1 & -9 & 0 \cr
+9 & 3 & 0 \cr\-
+8 & 10 & 14 \cr
+\end{pmat}$$
+\end{frame}
+
+\begin{frame}{分块矩阵的转置}
+设
+$$\bm A=\left[\begin{matrix}\bm A_{11}&\bm A_{12}&\cdots& \bm A_{1l}\\\bm A_{21}&\bm A_{22}&\cdots& \bm A_{2l}\\ \vdots&\vdots&&\vdots\\
+\bm A_{s1}&\bm A_{s2}&\cdots& \bm A_{sl}\end{matrix}\right]$$
+是一分块矩阵，那么
+$$\bm A'=\left[\begin{matrix}\bm A_{11}'&\bm A_{21}'&\cdots& \bm A_{s1}'\\\bm A_{12}'&\bm A_{22}'&\cdots& \bm A_{s2}'\\ \vdots&\vdots&&\vdots\\
+\bm A_{1l}'&\bm A_{2l}'&\cdots& \bm A_{sl}'\end{matrix}\right].$$
+\end{frame}
+
+\begin{frame}{六、准对角矩阵的运算}
+ \ \ \ \ 形如
+ $$\left[\begin{matrix}\bm A_1&\bm O&\cdots& \bm O\\\bm O&\bm A_2&\cdots& \bm O\\ \vdots&\vdots&&\vdots\\
+ \bm O&\bm O&\cdots& \bm A_s\end{matrix}\right]$$
+ 的分块矩阵称为{\hei 准对角矩阵}，其中$\bm A_i~(i=1,2,\cdots,s)$~是$n_i$阶子块。
+ \pause\vskip 5pt
+ \ \ \ \ 从定义可以看出，准对角阵必为方阵。设
+ $$\bm A=\left[\begin{matrix}\bm A_1&&& \\&\bm A_2&& \\ &&\ddots&\\&&& \bm A_s\end{matrix}\right],~~
+ \bm B=\left[\begin{matrix}\bm B_1&&& \\&\bm B_2&& \\ &&\ddots&\\&&& \bm B_s\end{matrix}\right],$$
+ 其中$\bm A_i$和$\bm B_i~(i=1,2,\cdots,s)$是同阶子块，则
+\end{frame}
+
+\begin{frame}\small
+ \ \ \ \ 1. $\bm A\pm\bm B=\left[\begin{matrix}\bm A_1\pm\bm B_1&&& \\&\bm A_2\pm\bm B_2&& \\ &&\ddots&\\&&& \bm A_s\pm\bm B_s\end{matrix}\right]$;
+ \vskip 5pt
+ \ \ \ \ 2. $k\bm A=\left[\begin{matrix}k\bm A_1&&& \\&k\bm A_2&& \\ &&\ddots&\\&&&k\bm A_s\end{matrix}\right]$;
+ \vskip 5pt
+ \ \ \ \ 3. $\bm A\bm B=\left[\begin{matrix}\bm A_1\bm B_1&&& \\&\bm A_2\bm B_2&& \\ &&\ddots&\\&&& \bm A_s\bm B_s\end{matrix}\right]$;
+ \vskip 5pt
+ \ \ \ \ 4. $\bm A'=\left[\begin{matrix}\bm A_1'&&& \\&\bm A_2'&& \\ &&\ddots&\\&&&\bm A_s'\end{matrix}\right]$.
+
+\end{frame}
+
+\section[3.3]{3.3 逆矩阵}
+
+\begin{frame}{逆矩阵的定义}
+ \ \ \ \ {\hei 定义~3.7} 设$\bm A$是数域$P$上的一个$n$阶方阵，如果存在数域$P$上的$n$阶矩阵$\bm B$使$\bm{AB}=\bm{BA}=\bm E$，则称$\bm A$是{\hei 可逆}的，并称$\bm B$是$\bm A$的一个{\hei 逆矩阵}。
+ \pause\vskip 5pt
+ \ \ \ \ 我们指出，若$\bm A$可逆，则$\bm A$的逆矩阵必定是唯一的。用$\bm A^{-1}$表示$\bm A$的逆矩阵，所以有
+ $$\bm A^{-1}\bm A=\bm A\bm A^{-1}=\bm E.$$
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 例~1} 设$n$阶方阵$\bm A$满足$\bm A^2+\bm A+\bm E=\bm O$. 证明$\bm A$可逆并求$\bm A^{-1}$.
+\end{frame}
+
+\begin{frame}{方阵的行列式}
+ \ \ \ \ {\hei 定义~3.8} 设$\bm A=(a_{ij})$是一个$n$阶方阵，我们把方阵$\bm A$中元素按原来的位置排列成的$n$阶行列式$|a_{ij}|$称为方阵$\bm A$的行列式，记为$|\bm A|$或det$\bm A$.
+ \pause\vskip 10pt
+ \ \ \ \ 容易看出，若$\bm A$为$n$阶方阵，则
+ \vskip 5pt
+ \ \ \ \ (1) $|\bm A'|=|\bm A|$;
+ \vskip 5pt
+ \ \ \ \ (2) $|\lambda\bm A|=\lambda^n|\bm A|$，其中$\lambda$为数。
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ 下面的定理说明两个方阵乘积的行列式等于它们分别取行列式之后的乘积。
+ \vskip 5pt
+ \ \ \ \ {\hei 定理~3.1} 设$\bm A,\bm B$为同阶方阵，则$|\bm A\bm B|=|\bm A||\bm B|$.
+ \pause\vskip 10pt
+  \ \ \ \ {\hei 推论} 设$\bm A_1,\bm A_2,\cdots,\bm A_m$为$m$个同阶方阵，则
+  $$|\bm A_1\bm A_2\cdots\bm A_m|=|\bm A_1||\bm A_2|\cdots|\bm A_m|.$$
+
+\end{frame}
+
+\begin{frame}
+  \ \ \ \ {\hei 例~2} 求
+  $$D_n=\left|\begin{matrix}1+x_1y_1&1+x_1y_2&\cdots&1+x_1y_n\\1+x_2y_1&1+x_2y_2&\cdots&1+x_2y_n\\ \vdots&\vdots&&\vdots\\1+x_ny_1&1+x_ny_2&\cdots&1+x_ny_n\end{matrix}\right|.$$
+\end{frame}
+
+\begin{frame}{方阵的伴随矩阵}
+ \ \ \ \ {\hei 例~3} 设$\bm A=(a_{ij})$为$n$阶方阵，我们把$\bm A$的行列式$|\bm A|=|a_{ij}|$中元素$a_{ij}$的余子式(代数余子式$A_{ij}$)，叫做$a_{ij}$在$\bm A$的余子式(代数余子式)。
+ \pause 令
+ $$\bm A^*=\left[\begin{matrix}A_{11}&A_{21}&\cdots&A_{n1}\\A_{12}&A_{22}&\cdots&A_{n2}\\ \vdots&\vdots&&\vdots\\A_{1n}&A_{2n}&\cdots&A_{nn}\end{matrix}\right],$$
+ \ \ \ \ 习惯上，称$\bm A^*$为方阵$\bm A$的{\hei 伴随矩阵}，它是由$\bm A$中各行的代数余子式依次按列排列所得到的矩阵。\pause 则有
+ $$\bm A\bm A^*=\bm A^*\bm A=|\bm A|\bm E.$$
+
+
+\end{frame}
+
+\begin{frame}{方阵的伴随矩阵}
+  \ \ \ \ {\hei 定理~3.2} 设$\bm A=(a_{ij})$为$n$阶方阵，则$\bm A$可逆的充要条件是$\bm A$的行列式$|\bm A|\neq0$. 这里$\bm A^{-1}=\frac{1}{|\bm A|}\bm A^*$，其中$\bm A^*$为$\bm A$的伴随矩阵。
+  \pause\vskip 10pt
+ \ \ \ \ {\hei 定义~3.9} 设$\bm A$为$n$阶方阵，若$|\bm A|\neq0$，则称$\bm A$是{\hei 非退化矩阵}(或称$\bm A$是{\hei 非退化的})。
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 推论} 若$\bm A,\bm B$为$n$阶方阵且$\bm{AB}=\bm E$，则$\bm A,\bm B$都可逆，且$\bm A^{-1}=\bm B,$ $\bm B^{-1}=\bm A.$
+
+ \end{frame}
+
+\begin{frame}{可逆矩阵的性质}
+ 可逆矩阵具有下列性质：
+ \pause\vskip 5pt
+ \ (1) 若$\bm A$可逆，则$|\bm A^{-1}|=|\bm A|^{-1}$;
+ \pause\vskip 5pt
+ \ (2) 若$\bm A$可逆，则$\bm A^{-1}$也可逆，且$(\bm A^{-1})^{-1}=\bm A$;
+ \pause\vskip 5pt
+ \ (3) 若$\bm A,\bm B$都是$n$阶可逆矩阵，则$\bm A\bm B$也可逆，且$(\bm{AB})^{-1}=\bm B^{-1}\bm A^{-1}$;
+ \pause\vskip 5pt
+ \ (4) 若$\bm A$可逆，则$\bm A'$也可逆，且$(\bm A')^{-1}=(\bm A^{-1})'$.
+ \pause\vskip 10pt
+ \ \ \ \ 另外，对于可逆矩阵$\bm A$，我们再规定$\bm A^{-m}=(\bm A^{-1})^m~(m\in\bm Z^+)$，于是对一切整数$k,l$，都有
+ $(\bm A^k)^l=\bm A^{kl}=(\bm A^l)^k.$
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 例~4} 设$\bm A=\left[\begin{matrix}1&0&-2\\0&2&1\\0&0&3\end{matrix}\right]$，求$\bm A^{-1}$.
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~5} 设$\bm A=$diag$(a_1,a_2,\cdots,a_n)$，其中$a_i\neq0,i=1,2\cdots n$，求$\bm A^{-1}$.
+ \pause\vskip 10pt
+ \ \ \ \ {\hei 例~6} 求解下列矩阵方程
+ \vskip 2pt
+ \ \ \ \ (1) $\left[\begin{matrix}1&2\\2&-1\end{matrix}\right]\bm X=\left[\begin{matrix}2&4\\3&1\end{matrix}\right]$;
+ \ \ \ (2) $\bm Y\left[\begin{matrix}1&2\\2&-1\end{matrix}\right]=\left[\begin{matrix}2&4\\3&1\end{matrix}\right]$.
+  \end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 例~7} 设$\bm A=\left[\begin{matrix}\bm A_1&&& \\&\bm A_2&& \\ &&\ddots&\\&&& \bm A_s\end{matrix}\right]$为准对角矩阵，且$\bm A_1,\bm A_2,\cdots,$ $\bm A_s$都可逆，则$\bm A$可逆，且$\bm A^{-1}=\left[\begin{matrix}\bm A_1^{-1}&&& \\&\bm A_2^{-1}&& \\ &&\ddots&\\&&& \bm A_s^{-1}\end{matrix}\right]$.
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 例~8$^*$} 设$\bm A,\bm B$分别为$m,n$阶可逆矩阵，$\bm C$为$n\times m$矩阵，证明分块矩阵$\left[\begin{matrix}\bm A&\bm O\\ \bm C&\bm B\end{matrix}\right]$可逆并求出它的逆矩阵。
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 解} 因为$\bm A,\bm B$都可逆，由定理3.2知，$|\bm A|\neq0,|\bm B|\neq0$，从而有
+ $$\left|\begin{matrix}\bm A&\bm O\\ \bm C&\bm B\end{matrix}\right|=|\bm A||\bm B|\neq0,$$
+ 即$\left[\begin{matrix}\bm A&\bm O\\ \bm C&\bm B\end{matrix}\right]$可逆。
+ \pause\vskip 5pt
+ \ \ \ \ 令$\bm X=\left[\begin{matrix}\bm X_{11}&\bm X_{12}\\ \bm X_{21}&\bm X_{22}\end{matrix}\right]$为$m+n$阶分块矩阵，其中$\bm X_{11},\bm X_{22}$分别为$m,n$阶可逆矩阵。假定$\bm X$就是所求的逆矩阵，则
+ \footnotesize
+ $$\left[\begin{matrix}\bm A&\bm O\\ \bm C&\bm B\end{matrix}\right]\left[\begin{matrix}\bm X_{11}&\bm X_{12}\\ \bm X_{21}&\bm X_{22}\end{matrix}\right]
+ =\left[\begin{matrix}\bm {AX}_{11}&\bm {AX}_{12}\\ \bm {CX}_{11}+\bm{BX}_{21}&\bm{CX}_{12}+\bm{BX}_{22}\end{matrix}\right]
+ =\left[\begin{matrix}\bm E_m&\bm O\\ \bm O&\bm E_n\end{matrix}\right],$$
+\end{frame}
+
+\begin{frame}
+ 所以
+ $$\left\{\begin{array}{l}
+ \bm A\bm X_{11}=\bm E_m,\\\bm A\bm X_{12}=\bm O,\\\bm {CX}_{11}+\bm{BX}_{21}=\bm O,\\\bm{CX}_{12}+\bm{BX}_{22}=\bm E_n.
+ \end{array}\right.$$
+ 不难求出$\bm X_{11}=\bm A^{-1},\bm X_{12}=\bm O,\bm X_{21}=-\bm B^{-1}\bm C\bm A^{-1},\bm X_{22}=\bm B^{-1}$，故
+ $$\left[\begin{matrix}\bm A&\bm O\\ \bm C&\bm B\end{matrix}\right]^{-1}=\left[\begin{matrix}\bm A^{-1}&\bm O\\ -\bm B^{-1}\bm C\bm A^{-1}&\bm B^{-1}\end{matrix}\right].$$$\hfill\Box$
+\end{frame}
+
+\section[3.4]{3.4 矩阵的初等变换与初等矩阵}
+
+\begin{frame}{初等变换}
+ \ \ \ \ {\hei 定义~3.10} 矩阵的下列变换叫做{\hei 行(列)初等变换}：
+ \vskip 5pt
+ \ \ \ \ (1) 交换矩阵的两行(列)的位置;
+ \vskip 5pt
+ \ \ \ \ (2) 用一个非零常数去乘矩阵的某一行(列);
+ \vskip 5pt
+ \ \ \ \ (3) 把矩阵一行(列)的任意倍数加到另一行(列)上去。
+ \vskip 5pt
+ \ \ \ \ 矩阵的行初等变换、列初等变换统称为矩阵的{\hei 初等变换}。
+ \pause\vskip 10pt
+ \ \ \ \ 显然，对任意矩阵$\bm A$作初等变换后得到一个与$\bm A$同型的矩阵$\bm B$，我们用符号$\bm A\rightarrow\bm B$表示矩阵$\bm A,\bm B$之间的这种关系。
+ \pause\vskip 10pt
+ \ \ \ \
+ 初等变换是可逆的，且逆变换也是初等变换。
+\end{frame}
+
+\begin{frame}{初等矩阵}
+ \ \ \ \ 为了进一步揭示初等变换前后两个矩阵之间的关系，我们引入初等矩阵的概念。
+ \vskip 3pt
+ \ \ \ \ {\hei 定义~3.11} 把单位矩阵$\bm E$作一次初等变换，得到的矩阵叫做{\hei 初等矩阵}。 \pause 初等矩阵有三种形式：
+\vskip 5pt
+ \ \ \ \ (1) $\bm E(i,j)=\left[\begin{matrix}1&&&&&&&&\\ &\ddots&&&&&&&\\&&1&&&&&&\\&&&0&\cdots&1&&&\\&&&\vdots&&\vdots&&&\\ &&&1&\cdots&0&&&\\&&&&&&1&&\\&&&&&&&\ddots&\\&&&&&&&&1\end{matrix}\right]
+ \begin{matrix} \\i\mbox{行}\\ \\j\mbox{行}\\ \\\end{matrix}$
+
+\end{frame}
+
+\begin{frame}\small
+ \ \ \ \ (2) $\bm E(i(c))=\left[\begin{matrix}1&&&&&&\\&\ddots&&&&&\\&&1&&&&\\&&&c&&&\\&&&&1&&\\&&&&&\ddots&\\&&&&&&1\end{matrix}\right]
+ \begin{matrix} \\i\mbox{行}\\ \\\end{matrix}$
+ \pause\vskip 5pt
+ \ \ \ \ (3) $\bm E(i,j(k))=\left[\begin{matrix}1&&&&&&&&\\ &\ddots&&&&&&&\\&&1&&&&&&\\&&&1&\cdots&k&&&\\&&&&\ddots&\vdots&&&\\ &&&&&1&&&\\&&&&&&1&&\\&&&&&&&\ddots&\\&&&&&&&&1\end{matrix}\right]
+ \begin{matrix} \\i\mbox{行}\\ \\j\mbox{行}\\ \\\end{matrix}$
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ 初等矩阵总是可逆的，并且初等矩阵的逆矩阵也仍然是初等矩阵。事实上，有
+ \begin{eqnarray*}
+ && \bm E(i,j)^{-1}=\bm E(i,j),\\
+ &&\bm E(i(c))^{-1}=\bm E(i(c^{-1})),\\
+ &&\bm E(i,j(k))^{-1}=\bm E(i,j(-k)).
+ \end{eqnarray*}
+
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ 下面的定理揭示了矩阵的初等变换与初等矩阵的密切联系。
+ \vskip 5pt
+ \ \ \ \ {\hei 定理~3.3} 设$\bm A$为$m\times n$矩阵，则对$\bm A$作一次{\hei 行初等变换}相当于在$\bm A$的{\hei 左边}乘以相应的$m\times m$初等矩阵；对$\bm A$作一次{\hei 列初等变换}相当于在$\bm A$的{\hei 右边}乘以相应的$n\times n$初等矩阵。
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 证明} 只证明行初等变换的情形。
+ \vskip 5pt
+ \ \ \ \ 设
+ $\bm A=\left[\begin{matrix}a_{11}&a_{12}&\cdots&a_{1n}\\a_{21}&a_{22}&\cdots&a_{2n}\\ \vdots&\vdots&&\vdots\\a_{m1}&a_{m2}&\cdots&a_{mn}\end{matrix}\right]$，把$\bm A$按行分块，得
+ $\bm A=\left[\begin{matrix}\bm A_1\\\bm A_2\\\vdots\\\bm A_m\end{matrix}\right]$，其中$\bm A_i=[a_{i1}~a_{i2}~\cdots~a_{in}],~i=1,2,\cdots,m.$
+ \vskip 5pt
+ \ \ \ \ 下面分别验证对于三类行初等变换的作用效果相当于左乘相应的$m$阶初等矩阵，即
+\end{frame}
+
+\begin{frame}
+$$\bm E(i,j)\bm A=\left[\begin{matrix}1&&&&&&&&\\ &\ddots&&&&&&&\\&&1&&&&&&\\&&&0&\cdots&1&&&\\&&&\vdots&&\vdots&&&\\ &&&1&\cdots&0&&&\\&&&&&&1&&\\&&&&&&&\ddots&\\&&&&&&&&1\end{matrix}\right]\left[\begin{matrix}\bm A_1\\\vdots\\\bm A_i\\\vdots\\\bm A_j\\\vdots\\\bm A_m\end{matrix}\right]
+=\left[\begin{matrix}\bm A_1\\\vdots\\\bm A_j\\\vdots\\\bm A_i\\\vdots\\\bm A_m\end{matrix}\right]$$
+这就相当于交换$\bm A$的第$i$行与第$j$行;
+\end{frame}
+\begin{frame}
+$$\bm E(i(c))\bm A=\left[\begin{matrix}1&&&&&&\\&\ddots&&&&&\\&&1&&&&\\&&&c&&&\\&&&&1&&\\&&&&&\ddots&\\&&&&&&1\end{matrix}\right]
+\left[\begin{matrix}\bm A_1\\\vdots\\\bm A_i\\\vdots\\\bm A_m\end{matrix}\right]
+=\left[\begin{matrix}\bm A_1\\\vdots\\c\bm A_i\\\vdots\\\bm A_m\end{matrix}\right]$$
+这就相当于$\bm A$的第$i$行乘以非零常数$c$;
+\end{frame}
+\begin{frame}\small
+$$\bm E(i,j(k))\bm A=\left[\begin{matrix}1&&&&&&&&\\ &\ddots&&&&&&&\\&&1&&&&&&\\&&&1&\cdots&k&&&\\&&&&\ddots&\vdots&&&\\ &&&&&1&&&\\&&&&&&1&&\\&&&&&&&\ddots&\\&&&&&&&&1\end{matrix}\right]
+\left[\begin{matrix}\bm A_1\\\vdots\\\bm A_i\\\vdots\\\bm A_j\\\vdots\\\bm A_m\end{matrix}\right]
+=\left[\begin{matrix}\bm A_1\\\vdots\\\bm A_i+k\bm A_j\\\vdots\\\bm A_j\\\vdots\\\bm A_m\end{matrix}\right]$$
+这就相当于把$\bm A$的第$j$行的$k$倍加到第$i$行上去。$\hfill\Box$
+\end{frame}
+
+\begin{frame}
+ \ \ \ \ {\hei 定理~3.3} 设$\bm A$为$m\times n$矩阵，则对$\bm A$作一次{\hei 行初等变换}相当于在$\bm A$的{\hei 左边}乘以相应的$m\times m$初等矩阵；对$\bm A$作一次{\hei 列初等变换}相当于在$\bm A$的{\hei 右边}乘以相应的$n\times n$初等矩阵。
+ \pause \vskip 10pt
+ \ \ \ \ 根据上面的定理可知，一个$m\times n$矩阵$\bm A$可经过一系列的初等变换化成同型矩阵$\bm B$，其充要条件是存在一系列的$m$阶初等矩阵$\bm P_1,\bm P_2,\cdots,\bm P_s$ 和
+  $n$阶初等矩阵$\bm Q_1,\bm Q_2,\cdots,\bm Q_t$，使$\bm B=\bm P_s\cdots\bm P_2\bm P_1\bm A\bm Q_1\bm Q_2\cdots\bm Q_t$.
+\end{frame}
+
+\begin{frame}{矩阵的标准形}\small
+ \ \ \ \ {\hei 定理~3.4} 任何一个$m\times n$矩阵$\bm A$都可以经过一系列的初等变换化成形如$\left[\begin{matrix}\bm E_r&\bm O\\\bm O&\bm O\end{matrix}\right]_{m\times n}$的形状，它称为矩阵$\bm A$的(等价){\hei 标准形}，其中$0\leq r\leq m,~0\leq r\leq n$.
+ \pause\vskip 5pt
+ \ \ \ \ {\hei 证明} 设$\bm A=\left[\begin{matrix}a_{11}&a_{12}&\cdots&a_{1n}\\a_{21}&a_{22}&\cdots&a_{2n}\\ \vdots&\vdots&&\vdots\\a_{m1}&a_{m2}&\cdots&a_{mn}\end{matrix}\right]$，若$\bm A=\bm O$，则$\bm A$本身就是标准形。下面设$\bm A\neq\bm O$且$a_{11}\neq0$. 这样，把第一行的$(-\frac{a_{i1}}{a_{11}})$倍加到第$i$行上去($i=2,3,\cdots,m$)，再把第一列的$(-\frac{a_{1j}}{a_{11}})$倍加到第$j$列上去($j=2,3,\cdots,n$)，并用$a_{11}^{-1}$乘以第一行，得
+ $$\bm A\rightarrow
+ \begin{pmat}[{|}]
+a_{11} & 0 & \cdots & 0 \cr\-
+0 & b_{22} & \cdots & b_{2n} \cr
+\vdots & \vdots &  & \vdots \cr
+0 & b_{m2} & \cdots & b_{nm} \cr
+\end{pmat}\rightarrow
+ \begin{pmat}[{|}]
+1 & 0 & \cdots & 0 \cr\-
+0 & b_{22} & \cdots & b_{2n} \cr
+\vdots & \vdots &  & \vdots \cr
+0 & b_{m2} & \cdots & b_{nm} \cr
+\end{pmat}\triangleq \left[\begin{matrix}1&\bm O\\\bm O&\bm B_1\end{matrix}\right],$$
+\end{frame}
+
+\begin{frame}
+%\ \ \ \ 利用数学归纳法(对$\bm A$行数$m$归纳)，我们假设$\bm B_1$可以经过一系列的初等变换化成标准形矩阵，于是有
+%$$\bm A\rightarrow\left[\begin{matrix}1&\bm O\\\bm O&\bm B_1\end{matrix}\right]\rightarrow\left[\begin{matrix}1&\bm O\\\bm O&\bm N\end{matrix}\right],$$
+%其中$\bm N$是$\bm B_1$的标准形。这样，$\left[\begin{matrix}1&\bm O\\\bm O&\bm N\end{matrix}\right]$就是标准形矩阵。
+\ \ \ \ 依此类推，对$\bm B_1$也可以作类似的初等变换......，最终，经过一系列的初等变换可以将$\bm A$化成它的标准形，即
+$$\bm A\rightarrow\left[\begin{matrix}\bm E_r&\bm O\\\bm O&\bm O\end{matrix}\right]_{m\times n}.$$
+$\hfill\Box$
+\end{frame}
+
+\begin{frame}
+\ \ \ \ 由于初等矩阵可逆，则它们的乘积也仍可逆，上面的定理~3.4可以用矩阵语言改述为
+\vskip 5pt
+\ \ \ \ {\hei 定理~3.4$'$} 对任意一个$m\times n$矩阵$\bm A$，都存在$m$阶可逆矩阵$\bm P$和$n$阶可逆矩阵$\bm Q$，使$\bm{PAQ}=\left[\begin{matrix}\bm E_r&\bm O\\\bm O&\bm O\end{matrix}\right]_{m\times n}$为矩阵$\bm A$的标准形。
+\pause\vskip 10pt
+\ \ \ \ {\hei 定理~3.5} 任意一个$m\times n$矩阵$\bm A$都可以只用行初等变换化成阶梯形矩阵。
+\pause\vskip 10pt
+\ \ \ \ {\hei 例~1} 分别求矩阵$\bm A=\left[\begin{matrix}1&2&3&0\\2&3&-2&4\end{matrix}\right]$和$\bm B=\left[\begin{matrix}4&-2\\3&2\\-2&2\end{matrix}\right]$的标准形。
+
+\end{frame}
+
+\begin{frame}{矩阵等价的定义}
+\ \ \ \ {\hei 定义~3.12} 设$\bm A,\bm B$都是$m\times n$矩阵，若从$\bm A$出发可以用一系列初等变换变成$\bm B$，则称$\bm A$与$\bm B$等价。
+\pause\vskip 10pt
+\ \ \ \ 不难看出，矩阵等价具有下列性质：
+\vskip 5pt
+\ \ \ \ (1) 自反性：任意$m\times n$矩阵$\bm A$与自身等价；
+\vskip 5pt
+\ \ \ \ (2) 对称性：若$\bm A$与$\bm B$等价，则$\bm B$与$\bm A$也等价；
+\vskip 5pt
+\ \ \ \ (3) 传递性：若$\bm A$与$\bm B$等价，$\bm B$与$\bm C$等价，则$\bm A$与$\bm C$等价。
+
+
+\end{frame}
+
+\begin{frame}{可逆矩阵的标准形}
+\ \ \ \ {\hei 定理~3.6} $n$阶方阵$\bm A$可逆的充要条件是$\bm A$可表示为一系列初等矩阵的乘积。
+\pause\vskip 10pt
+\ \ \ \ {\hei 推论~1} 方阵$\bm A$可逆的充要条件是$\bm A$可以只用行(列)初等变换化成单位矩阵。
+\pause\vskip 10pt
+\ \ \ \ {\hei 推论~2} 两个$m\times n$矩阵$\bm A,\bm B$等价的充要条件是存在$m$阶可逆矩阵$\bm P$和$n$阶可逆矩阵$\bm Q$，使$\bm B=\bm{PAQ}$.
+
+\end{frame}
+
+\begin{frame}{求逆矩阵的方法}
+\ \ \ \ 1. 行初等变换
+$$(\bm A,\bm E)_{n\times 2n}\xrightarrow{~\mbox{只作行初等变换}~}(\bm E,\bm A^{-1})_{n\times 2n}$$
+\pause\vskip 10pt
+\ \ \ \ 2. 列初等变换
+$$\left[\begin{matrix}\bm A\\\bm E\end{matrix}\right]_{2n\times n}\xrightarrow{~\mbox{只作列初等变换}~}\left[\begin{matrix}\bm E\ \ \ \ \\\bm A^{-1}\end{matrix}\right]_{2n\times n}$$
+
+\end{frame}
+
+\begin{frame}{求矩阵方程的方法}
+\ \ \ \ 1. 对于矩阵方程$\bm{AX}=\bm B$，若$\bm A$可逆，则可以用
+$$(\bm A,\bm B)_{n\times 2n}\xrightarrow{~\mbox{只作行初等变换}~}(\bm E,\bm A^{-1}\bm B)_{n\times 2n}$$
+的方法求出矩阵$\bm X=\bm A^{-1}\bm B$.
+\pause\vskip 10pt
+\ \ \ \ 2. 对于矩阵方程$\bm{YA}=\bm B$，若$\bm A$可逆，则可以用
+$$\left[\begin{matrix}\bm A\\\bm B\end{matrix}\right]_{2n\times n}\xrightarrow{~\mbox{只作列初等变换}~}\left[\begin{matrix}\bm E\ \ \ \ \\\bm {BA}^{-1}\end{matrix}\right]_{2n\times n}$$
+的方法求出矩阵$\bm Y=\bm{BA}^{-1}$.
+
+\end{frame}
+
+\begin{frame}
+\ \ \ \ {\hei 例~2} 解矩阵方程
+$$\bm X\left[\begin{matrix}2&1&-1\\2&1&0\\1&1&1\end{matrix}\right]=\left[\begin{matrix}1&-1&3\\4&3&2\\1&-2&5\end{matrix}\right].$$
+\pause\vskip 10pt
+\ \ \ \ {\hei 例~3} 解线性方程组
+$$\left\{\begin{array}{rcr}
+x_1+2x_2+2x_3&=&-2,\\
+2x_1+4x_2-x_3&=&1,\\
+3x_2+x_3&=&2.
+\end{array}\right.$$
+\end{frame}
+
+
+%=====================================================frame8=========================================
+
+
+\begin{frame}
+\begin{center}
+{\textcolor[rgb]{0.50,0.00,1.00}{\textbf{\xiaoerhao{Thanks for your attention!}}}}\bigskip
+\end{center}
+\end{frame}
+\end{CJK}
+\end{document}
+
+
